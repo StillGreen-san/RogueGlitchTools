@@ -1,3 +1,5 @@
+#include "RogueGlitchDencrypter.hpp"
+
 #include <array>
 #include <filesystem>
 #include <fstream>
