@@ -10,6 +10,8 @@ endif()
 
 add_subdirectory(ext SYSTEM)
 
+find_package(cryptopp CONFIG REQUIRED)
+
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
 option(ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
 option(ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
@@ -19,10 +21,10 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerWarnings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProjectSettings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/StaticAnalyzers.cmake)
 
-add_library(${PROJECT_NAME}-lib src/gameplay.cpp src/grid.cpp src/input.cpp src/app-types.cpp src/savefile.cpp src/gui.cpp)
+add_library(${PROJECT_NAME}-lib src/gameplay.cpp src/grid.cpp src/input.cpp src/app-types.cpp src/savefile.cpp src/gui.cpp src/RogueGlitchDencrypter.cpp)
 target_include_directories(${PROJECT_NAME}-lib PUBLIC inc)
 target_compile_features(${PROJECT_NAME}-lib PUBLIC cxx_std_17)
-target_link_libraries(${PROJECT_NAME}-lib PUBLIC raylib::lib raylib::cpp raylib::gui raylib::res)
+target_link_libraries(${PROJECT_NAME}-lib PUBLIC raylib::lib raylib::cpp raylib::gui raylib::res cryptopp::cryptopp)
 
 add_executable(${PROJECT_NAME} WIN32 src/main.cpp src/graphics.cpp src/app.cpp src/loading.cpp
 		src/menu.cpp src/game.cpp src/saveupgrade.cpp)
