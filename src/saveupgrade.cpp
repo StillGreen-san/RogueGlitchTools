@@ -47,8 +47,14 @@ void SaveUpgrade::UpdateDraw([[maybe_unused]] App& app)
 		unsigned char* fileData = ::LoadFileData(filePaths.paths[0], &fileSize);
 
 		//! cannot be array due to some linker bug
-		const std::vector<ReplacementInfo> replacements{{{"System.Int32,mscorlib", "int"},
-		    {"System.Boolean,mscorlib", "bool"}, {"Version=2.0.0.0", "Version=4.0.0.0"}}};
+		const std::vector<ReplacementInfo> replacements{{
+		    {"System.Int32,mscorlib", "int"},      //
+		    {"System.Boolean,mscorlib", "bool"},   //
+		    {"\"DarkMissiles\",", ""},             //
+		    {"\"FireRateUpOnCrit\",", ""},         //
+		    {"\"SuperJumpBoots\",", ""},           //
+		    {"Version=2.0.0.0", "Version=4.0.0.0"} //
+		}};
 		std::string saveData = ::decrypt(fileData, fileSize);
 
 		for(const ReplacementInfo& info : replacements)
@@ -56,12 +62,21 @@ void SaveUpgrade::UpdateDraw([[maybe_unused]] App& app)
 			size_t offset = 0;
 			while(true)
 			{
-				size_t pos = saveData.find(info.oldThing, offset);
+				std::string_view oldThing =
+				    info.newThing.empty() ? info.oldThing.substr(0, info.oldThing.size() - 1) : info.oldThing;
+				size_t pos = saveData.find(oldThing, offset);
 				if(pos == std::string::npos)
 				{
 					break;
 				}
-				saveData.replace(pos, info.oldThing.size(), info.newThing);
+				if(info.newThing.empty())
+				{
+					if(saveData.find(info.oldThing, offset) != std::string::npos)
+					{
+						oldThing = info.oldThing;
+					}
+				}
+				saveData.replace(pos, oldThing.size(), info.newThing);
 			}
 		}
 
