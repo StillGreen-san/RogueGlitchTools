@@ -43,7 +43,7 @@ public:
 		[[nodiscard]] int compare(const Settings& rhs) const noexcept;
 
 		static constexpr int SCREEN_WIDTH = 600;
-		static constexpr int SCREEN_HEIGHT = 600;
+		static constexpr int SCREEN_HEIGHT = 300;
 		static constexpr float LOCK_DELAY = 0.5f;
 		static constexpr float DELAYED_AUTO_SHIFT = 1.0f / 6.0f;
 		static constexpr float AUTO_REPEAT_RATE = 1.0f / 30.0f;

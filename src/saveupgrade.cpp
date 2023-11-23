@@ -6,10 +6,17 @@
 #include <raygui.h>
 #include <raylib-cpp.hpp>
 
+#include <string_view>
+
 #if defined(PLATFORM_WEB)
 #include "emscripten_browser_file.h"
 // #include <emscripten/emscripten.h>
 #endif
+
+namespace
+{
+constexpr int FONT_SIZE = 30;
+}
 
 namespace raymino
 {
@@ -21,7 +28,8 @@ std::unique_ptr<IScene> MakeScene<Scene::SaveUpgrade>(App& app)
 
 SaveUpgrade::SaveUpgrade(App& app)
 {
-	// #if defined(PLATFORM_WEB)
+	::GuiSetStyle(::GuiControl::DEFAULT, ::GuiDefaultProperty::TEXT_SIZE, FONT_SIZE);
+	::GuiLock();
 }
 
 void SaveUpgrade::PreDestruct([[maybe_unused]] App& app)
@@ -91,7 +99,8 @@ void SaveUpgrade::UpdateDraw([[maybe_unused]] App& app)
 		::UnloadDroppedFiles(filePaths);
 	}
 
-	if(::GuiButton({190, 278, 200, 30}, "Upgrade Lagacy SaveFile"))
+	::DrawText("Upgrade Lagacy SaveFile", 106, 120, FONT_SIZE, DARKGRAY);
+	if(::GuiButton({100, 160, 400, 45}, "Drop SaveFile Here"))
 	{
 	}
 
