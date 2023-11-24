@@ -3,15 +3,30 @@
 #include "RogueGlitchDencrypter.hpp"
 #include "app.hpp"
 
+#include <Functions.hpp>
 #include <raygui.h>
 #include <raylib-cpp.hpp>
 
+#include <string>
 #include <string_view>
+#include <vector>
 
 #if defined(PLATFORM_WEB)
 #include "emscripten_browser_file.h"
 // #include <emscripten/emscripten.h>
 #endif
+
+namespace raylib
+{
+std::vector<unsigned char> LoadFileData(const std::string& fileName)
+{
+	unsigned bytes = 0;
+	unsigned char* data = ::LoadFileData(fileName.c_str(), &bytes);
+	std::vector<unsigned char> output(data, data + bytes);
+	::UnloadFileData(data);
+	return output;
+}
+} // namespace raylib
 
 namespace
 {
@@ -50,20 +65,23 @@ void SaveUpgrade::UpdateDraw([[maybe_unused]] App& app)
 
 	if(::IsFileDropped())
 	{
-		::FilePathList filePaths = ::LoadDroppedFiles();
-		unsigned fileSize{};
-		unsigned char* fileData = ::LoadFileData(filePaths.paths[0], &fileSize);
+		::TraceLog(LOG_INFO, "RGSU: received file");
+
+		std::vector<std::string> filePaths = raylib::LoadDroppedFiles();
+		std::vector<unsigned char> fileData = raylib::LoadFileData(filePaths.front());
 
 		//! cannot be array due to some linker bug
 		const std::vector<ReplacementInfo> replacements{{
 		    {"System.Int32,mscorlib", "int"},      //
 		    {"System.Boolean,mscorlib", "bool"},   //
 		    {"DarkMissiles", "ViralInfection"},    //
-		    {"FireRateUpOnCrit,", "CritRing"},     //
-		    {"SuperJumpBoots,", "BoostedJumps"},   //
+		    {"FireRateUpOnCrit", "CritRing"},      //
+		    {"SuperJumpBoots", "BoostedJumps"},    //
 		    {"Version=2.0.0.0", "Version=4.0.0.0"} //
 		}};
-		std::string saveData = ::decrypt(fileData, fileSize);
+
+		std::string saveData = ::decrypt(fileData.data(), fileData.size());
+		::TraceLog(LOG_INFO, "RGSU: file decrypted");
 
 		for(const ReplacementInfo& info : replacements)
 		{
@@ -79,15 +97,17 @@ void SaveUpgrade::UpdateDraw([[maybe_unused]] App& app)
 			}
 		}
 
+		::TraceLog(LOG_INFO, "RGSU: replaced incompatible contents");
+
 		std::vector<unsigned char> newData = ::encrypt(saveData);
+
+		::TraceLog(LOG_INFO, "RGSU: file encrypted");
+		::TraceLog(LOG_INFO, "RGSU: send file to user");
 
 #if defined(PLATFORM_WEB)
 		emscripten_browser_file::download(
 		    "SaveData__Deluxe.glitch", "application/octet-stream", newData.data(), newData.size());
 #endif
-
-		::UnloadFileData(fileData);
-		::UnloadDroppedFiles(filePaths);
 	}
 
 	::DrawText("Upgrade Lagacy SaveFile", 106, 120, FONT_SIZE, DARKGRAY);
