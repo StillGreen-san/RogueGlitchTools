@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 3.25)
 
 project(raymino C CXX)
 
+add_library(emsdk_html INTERFACE)
 if(EMSCRIPTEN)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sUSE_GLFW=3 -sSTACK_SIZE=2MB")
-	set(CMAKE_EXECUTABLE_SUFFIX ".html")
+	target_compile_options(emsdk_html INTERFACE -sNO_DISABLE_EXCEPTION_CATCHING)
+	target_link_options(emsdk_html INTERFACE -sUSE_GLFW=3 -sSTACK_SIZE=2MB)
+	set_target_properties(emsdk_html PROPERTIES SUFFIX ".html")
 endif()
 
 add_subdirectory(ext SYSTEM)
@@ -31,7 +32,7 @@ add_executable(${PROJECT_NAME} WIN32 src/main.cpp src/graphics.cpp src/app.cpp s
 if(WIN32)
 	target_sources(${PROJECT_NAME} PRIVATE src/windows.cpp)
 endif()
-target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-lib magic_enum::magic_enum)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-lib magic_enum::magic_enum emsdk_html)
 
 enable_testing()
 include(Catch)
