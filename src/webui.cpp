@@ -4,12 +4,19 @@
 #else
 #define EMSCRIPTEN_KEEPALIVE
 #endif
-#include <string>
 
-std::string tryUpgrade(const std::string& fileContent)
+#include <string>
+#include <vector>
+
+std::vector<unsigned char> tryUpgrade(const std::string& fileContent)
 {
 	emscripten_log(EM_LOG_INFO, "Size: %d, Content: %.60s", fileContent.size(), fileContent.data());
-	return fileContent;
+	return {1, 0, 1};
+}
+
+EMSCRIPTEN_BINDINGS(std)
+{
+	emscripten::register_vector<unsigned char>("VectorBytes");
 }
 
 EMSCRIPTEN_BINDINGS(RGSU)

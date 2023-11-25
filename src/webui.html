@@ -70,7 +70,7 @@
     </div>
 </form>
 
-<script src="./webui.js"></script>
+<script src="webui.js"></script>
 
 <script>
     const inputElement = document.getElementById("fileInput");
@@ -80,6 +80,14 @@
         if (this.files.length >= 1) {
             const fileContent = await this.files[0].arrayBuffer();
             const upgraded = Module.tryUpgrade(fileContent);
+            var out = new Blob({
+                [Symbol.iterator]: function* () {
+                    for (let i = 0; i < upgraded.size(); i++) {
+                        yield upgraded.get(i);
+                    }
+                }
+            });
+            console.log(await out.text());
         }
     }
 </script>
