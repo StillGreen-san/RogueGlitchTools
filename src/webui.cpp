@@ -1,15 +1,18 @@
 #ifdef __EMSCRIPTEN__
+#include <emscripten/bind.h>
 #include <emscripten/emscripten.h>
 #else
 #define EMSCRIPTEN_KEEPALIVE
 #endif
 #include <string>
 
-extern "C"
+std::string tryUpgrade(const std::string& fileContent)
 {
-	EMSCRIPTEN_KEEPALIVE bool tryUpgrade(const unsigned char* fileContent, unsigned size)
-	{
-		emscripten_log(EM_LOG_INFO, "Size: %d, Content: %.60s", size, reinterpret_cast<const char*>(fileContent));
-		return fileContent && size;
-	}
+	emscripten_log(EM_LOG_INFO, "Size: %d, Content: %.60s", fileContent.size(), fileContent.data());
+	return fileContent;
+}
+
+EMSCRIPTEN_BINDINGS(RGSU)
+{
+	emscripten::function("tryUpgrade", &tryUpgrade);
 }
