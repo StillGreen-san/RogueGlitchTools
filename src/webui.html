@@ -76,8 +76,14 @@
     const inputElement = document.getElementById("fileInput");
     inputElement.addEventListener("change", handleFiles, false);
 
-    function handleFiles() {
-        const fileList = this.files; /* now you can work with the file list */
+    async function handleFiles() {
+        if (this.files.length >= 1) {
+            const fileContent = await this.files[0].arrayBuffer();
+            var u8Arr = new Uint8Array(fileContent);
+            var heapSpace = Module._malloc(u8Arr.byteLength);
+            Module.HEAPU8.set(u8Arr, heapSpace);
+            const success = Module._tryUpgrade(heapSpace, u8Arr.byteLength);
+        }
     }
 </script>
 
