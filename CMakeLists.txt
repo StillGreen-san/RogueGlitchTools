@@ -46,7 +46,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-lib magic_enum::ma
 
 if(EMSCRIPTEN)
 	add_executable(webui src/webui.cpp)
-	target_link_libraries(webui PRIVATE emsdk_wasm)
+	target_include_directories(webui PUBLIC inc)
+	target_link_libraries(webui PRIVATE emsdk_wasm upgrade)
 	add_custom_target(webui.html)
 	add_custom_command(TARGET webui.html COMMAND ${CMAKE_COMMAND}
 			-E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/src/webui.html $<TARGET_FILE_DIR:webui>

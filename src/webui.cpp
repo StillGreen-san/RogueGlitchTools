@@ -1,3 +1,5 @@
+#include "RogueGlitchDencrypter.hpp"
+
 #ifdef __EMSCRIPTEN__
 #include <emscripten/bind.h>
 #include <emscripten/emscripten.h>
@@ -10,8 +12,7 @@
 
 std::vector<unsigned char> tryUpgrade(const std::string& fileContent)
 {
-	emscripten_log(EM_LOG_INFO, "Size: %d, Content: %.60s", fileContent.size(), fileContent.data());
-	return {1, 0, 1};
+	return upgrade(reinterpret_cast<const unsigned char*>(fileContent.data()), fileContent.size());
 }
 
 EMSCRIPTEN_BINDINGS(std)
