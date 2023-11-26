@@ -3,5 +3,5 @@
 #include <string>
 #include <vector>
 
-std::string decrypt(unsigned char* data, unsigned size);
-std::vector<unsigned char> encrypt(std::string inString);
+std::string decrypt(const unsigned char* data, unsigned size);
+std::vector<unsigned char> encrypt(const std::string& inString);

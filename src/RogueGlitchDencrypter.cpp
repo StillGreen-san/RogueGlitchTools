@@ -35,7 +35,7 @@ std::vector<byte> operator""_byte(const char* bytes, size_t size)
 std::map<Version, std::vector<byte>> esKeys{{Version::Ultra, "YouShouldNotBeAbleToReadThis_1337"_byte},
     {Version::Lagacy, "YouAreACheaterIfYouReadThis_376347"_byte}};
 
-std::string decrypt(unsigned char* data, unsigned size)
+std::string decrypt(const unsigned char* data, unsigned size)
 {
 	std::array<byte, BUFSIZE> ivBuffer;
 	std::copy_n(data, ivBuffer.size(), ivBuffer.data());
@@ -58,7 +58,7 @@ std::string decrypt(unsigned char* data, unsigned size)
 	return outString;
 }
 
-std::vector<unsigned char> encrypt(std::string inString)
+std::vector<unsigned char> encrypt(const std::string& inString)
 {
 	const std::vector<byte>& password = esKeys[Version::Ultra];
 
