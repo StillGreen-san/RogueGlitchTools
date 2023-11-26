@@ -51,12 +51,6 @@ void SaveUpgrade::PreDestruct([[maybe_unused]] App& app)
 {
 }
 
-struct ReplacementInfo
-{
-	std::string_view oldThing;
-	std::string_view newThing;
-};
-
 void SaveUpgrade::UpdateDraw([[maybe_unused]] App& app)
 {
 	::BeginDrawing();
@@ -65,43 +59,12 @@ void SaveUpgrade::UpdateDraw([[maybe_unused]] App& app)
 
 	if(::IsFileDropped())
 	{
-		::TraceLog(LOG_INFO, "RGSU: received file");
+		const std::vector<std::string> filePaths = raylib::LoadDroppedFiles();
+		const std::vector<unsigned char> fileData = raylib::LoadFileData(filePaths.front());
 
-		std::vector<std::string> filePaths = raylib::LoadDroppedFiles();
-		std::vector<unsigned char> fileData = raylib::LoadFileData(filePaths.front());
+		const std::vector<unsigned char> newData = upgrade(fileData.data(), fileData.size());
 
-		//! cannot be array due to some linker bug
-		const std::vector<ReplacementInfo> replacements{{
-		    {"System.Int32,mscorlib", "int"},      //
-		    {"System.Boolean,mscorlib", "bool"},   //
-		    {"DarkMissiles", "ViralInfection"},    //
-		    {"FireRateUpOnCrit", "CritRing"},      //
-		    {"SuperJumpBoots", "BoostedJumps"},    //
-		    {"Version=2.0.0.0", "Version=4.0.0.0"} //
-		}};
-
-		std::string saveData = ::decrypt(fileData.data(), fileData.size());
-		::TraceLog(LOG_INFO, "RGSU: file decrypted");
-
-		for(const ReplacementInfo& info : replacements)
-		{
-			size_t offset = 0;
-			while(true)
-			{
-				size_t pos = saveData.find(info.oldThing, offset);
-				if(pos == std::string::npos)
-				{
-					break;
-				}
-				saveData.replace(pos, info.oldThing.size(), info.newThing);
-			}
-		}
-
-		::TraceLog(LOG_INFO, "RGSU: replaced incompatible contents");
-
-		std::vector<unsigned char> newData = ::encrypt(saveData);
-
-		::TraceLog(LOG_INFO, "RGSU: file encrypted");
+		::TraceLog(LOG_INFO, "RGSU: file upgraded");
 		::TraceLog(LOG_INFO, "RGSU: send file to user");
 
 #if defined(PLATFORM_WEB)

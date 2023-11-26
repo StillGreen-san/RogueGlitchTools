@@ -85,3 +85,41 @@ std::vector<unsigned char> encrypt(const std::string& inString)
 
 	return outVec;
 }
+
+struct ReplacementInfo
+{
+	std::string_view oldThing;
+	std::string_view newThing;
+};
+
+std::vector<unsigned char> upgrade(const unsigned char* data, unsigned size)
+{
+	//! cannot be array due to some linker bug
+	const std::vector<ReplacementInfo> replacements{{
+	    {"System.Int32,mscorlib", "int"},      //
+	    {"System.Boolean,mscorlib", "bool"},   //
+	    {"DarkMissiles", "ViralInfection"},    //
+	    {"FireRateUpOnCrit", "CritRing"},      //
+	    {"SuperJumpBoots", "BoostedJumps"},    //
+	    {"Version=2.0.0.0", "Version=4.0.0.0"} //
+	}};
+
+	std::string saveData = ::decrypt(data, size);
+
+	for(const ReplacementInfo& info : replacements)
+	{
+		size_t offset = 0;
+		while(true)
+		{
+			size_t pos = saveData.find(info.oldThing, offset);
+			if(pos == std::string::npos)
+			{
+				break;
+			}
+			offset = pos;
+			saveData.replace(pos, info.oldThing.size(), info.newThing);
+		}
+	}
+
+	return ::encrypt(saveData);
+}

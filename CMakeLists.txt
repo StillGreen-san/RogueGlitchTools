@@ -27,17 +27,22 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerWarnings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProjectSettings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/StaticAnalyzers.cmake)
 
-add_library(${PROJECT_NAME}-lib src/gameplay.cpp src/grid.cpp src/input.cpp src/app-types.cpp src/savefile.cpp src/gui.cpp src/RogueGlitchDencrypter.cpp)
+add_library(upgrade src/RogueGlitchDencrypter.cpp)
+target_include_directories(upgrade PUBLIC inc)
+target_compile_features(upgrade PUBLIC cxx_std_17)
+target_link_libraries(upgrade PRIVATE cryptopp::cryptopp)
+
+add_library(${PROJECT_NAME}-lib src/gameplay.cpp src/grid.cpp src/input.cpp src/app-types.cpp src/savefile.cpp src/gui.cpp)
 target_include_directories(${PROJECT_NAME}-lib PUBLIC inc)
 target_compile_features(${PROJECT_NAME}-lib PUBLIC cxx_std_17)
-target_link_libraries(${PROJECT_NAME}-lib PUBLIC raylib::lib raylib::cpp raylib::gui raylib::res cryptopp::cryptopp)
+target_link_libraries(${PROJECT_NAME}-lib PUBLIC raylib::lib raylib::cpp raylib::gui raylib::res)
 
 add_executable(${PROJECT_NAME} WIN32 src/main.cpp src/graphics.cpp src/app.cpp src/loading.cpp
 		src/menu.cpp src/game.cpp src/saveupgrade.cpp)
 if(WIN32)
 	target_sources(${PROJECT_NAME} PRIVATE src/windows.cpp)
 endif()
-target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-lib magic_enum::magic_enum emsdk_html)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-lib magic_enum::magic_enum emsdk_html upgrade)
 
 if(EMSCRIPTEN)
 	add_executable(webui src/webui.cpp)
