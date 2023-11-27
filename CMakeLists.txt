@@ -10,8 +10,7 @@ if(EMSCRIPTEN)
 	set_target_properties(emsdk_wasm PROPERTIES SUFFIX ".wasm")
 endif()
 
-add_subdirectory(ext SYSTEM)
-
+find_package(Catch2 3 CONFIG REQUIRED)
 find_package(cryptopp CONFIG REQUIRED)
 
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
