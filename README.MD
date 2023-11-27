@@ -1,15 +1,13 @@
-# raymino
+# RogueGlitchTools
 
-configurable tetris build with raylib in C++ for desktop & web
+various tool for the game Rogue Glitch (Ultra)
 
-[play web version here](https://sgs.moe/raymino)
+[save upgrade webapp](https://sgs.moe/rogueglitchsaveupgrade/)
 
-![Animated Picture](raymino.png)
+## dependencies
 
-## submodules
+- [cryptopp](https://github.com/weidai11/cryptopp) [[BSL](https://github.com/weidai11/cryptopp/blob/master/License.txt)]
 
-- [raylib](https://github.com/raysan5/raylib) [Zlib]
-- [raylib-cpp](https://github.com/RobLoach/raylib-cpp) [Zlib]
-- [raygui](https://github.com/raysan5/raygui) [Zlib]
-- [rres](https://github.com/raysan5/rres) [MIT] (currently unused)
-- [magic_enum](https://github.com/Neargye/magic_enum) [MIT]
+#### testing only
+
+- [Catch2](https://github.com/catchorg/Catch2) [[BSL](https://github.com/catchorg/Catch2/blob/devel/LICENSE.txt)]
