@@ -1,13 +1,12 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(raymino C CXX)
+project(RogueGlitchTools CXX)
 
-add_library(emsdk_wasm INTERFACE)
 if(EMSCRIPTEN)
-	target_compile_options(emsdk_wasm INTERFACE -sNO_DISABLE_EXCEPTION_CATCHING)
-	target_link_options(emsdk_wasm INTERFACE -sSTACK_SIZE=2MB --no-entry)
-	target_link_options(emsdk_wasm INTERFACE -sEXPORTED_FUNCTIONS=_free,_malloc -lembind)
-	set_target_properties(emsdk_wasm PROPERTIES SUFFIX ".wasm")
+	add_library(rgt_wasm INTERFACE)
+	target_compile_options(rgt_wasm INTERFACE -sNO_DISABLE_EXCEPTION_CATCHING)
+	target_link_options(rgt_wasm INTERFACE -sSTACK_SIZE=2MB --no-entry -lembind)
+	set_target_properties(rgt_wasm PROPERTIES SUFFIX ".wasm")
 endif()
 
 find_package(Catch2 3 CONFIG REQUIRED)
@@ -22,27 +21,27 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerWarnings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProjectSettings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/StaticAnalyzers.cmake)
 
-add_library(upgrade src/RogueGlitchDencrypter.cpp)
-target_include_directories(upgrade PUBLIC inc)
-target_compile_features(upgrade PUBLIC cxx_std_17)
-target_link_libraries(upgrade PRIVATE cryptopp::cryptopp)
+add_library(rgt_upgrade src/RogueGlitchDencrypter.cpp)
+target_include_directories(rgt_upgrade PUBLIC inc)
+target_compile_features(rgt_upgrade PUBLIC cxx_std_17)
+target_link_libraries(rgt_upgrade PRIVATE cryptopp::cryptopp)
 
 if(EMSCRIPTEN)
-	add_executable(webui src/webui.cpp)
-	target_include_directories(webui PUBLIC inc)
-	target_link_libraries(webui PRIVATE emsdk_wasm upgrade)
-	add_custom_target(webui.html)
-	add_custom_command(TARGET webui.html COMMAND ${CMAKE_COMMAND}
-			-E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/src/webui.html $<TARGET_FILE_DIR:webui>
+	add_executable(rgt_webui src/webui.cpp)
+	target_include_directories(rgt_webui PUBLIC inc)
+	target_link_libraries(rgt_webui PRIVATE rgt_wasm rgt_upgrade)
+	add_custom_target(rgt_webui.html)
+	add_custom_command(TARGET rgt_webui.html COMMAND ${CMAKE_COMMAND}
+			-E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/src/webui.html $<TARGET_FILE_DIR:rgt_webui>
 	)
-	add_dependencies(webui webui.html)
+	add_dependencies(rgt_webui rgt_webui.html)
 endif()
 
 enable_testing()
 include(Catch)
 
-add_executable(${PROJECT_NAME}-test test/dummy.cpp)
-target_link_libraries(${PROJECT_NAME}-test PRIVATE Catch2::Catch2WithMain)
+add_executable(rgt_test test/dummy.cpp)
+target_link_libraries(rgt_test PRIVATE Catch2::Catch2WithMain)
 if(NOT EMSCRIPTEN)
-	catch_discover_tests(${PROJECT_NAME}-test)
+	catch_discover_tests(rgt_test)
 endif()
