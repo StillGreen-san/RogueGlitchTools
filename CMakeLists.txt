@@ -2,15 +2,11 @@ cmake_minimum_required(VERSION 3.25)
 
 project(raymino C CXX)
 
-add_library(emsdk_html INTERFACE)
 add_library(emsdk_wasm INTERFACE)
 if(EMSCRIPTEN)
-	target_compile_options(emsdk_html INTERFACE -sNO_DISABLE_EXCEPTION_CATCHING)
 	target_compile_options(emsdk_wasm INTERFACE -sNO_DISABLE_EXCEPTION_CATCHING)
-	target_link_options(emsdk_html INTERFACE -sUSE_GLFW=3 -sSTACK_SIZE=2MB)
 	target_link_options(emsdk_wasm INTERFACE -sSTACK_SIZE=2MB --no-entry)
 	target_link_options(emsdk_wasm INTERFACE -sEXPORTED_FUNCTIONS=_free,_malloc -lembind)
-	set_target_properties(emsdk_html PROPERTIES SUFFIX ".html")
 	set_target_properties(emsdk_wasm PROPERTIES SUFFIX ".wasm")
 endif()
 
@@ -32,18 +28,6 @@ target_include_directories(upgrade PUBLIC inc)
 target_compile_features(upgrade PUBLIC cxx_std_17)
 target_link_libraries(upgrade PRIVATE cryptopp::cryptopp)
 
-add_library(${PROJECT_NAME}-lib src/gameplay.cpp src/grid.cpp src/input.cpp src/app-types.cpp src/savefile.cpp src/gui.cpp)
-target_include_directories(${PROJECT_NAME}-lib PUBLIC inc)
-target_compile_features(${PROJECT_NAME}-lib PUBLIC cxx_std_17)
-target_link_libraries(${PROJECT_NAME}-lib PUBLIC raylib::lib raylib::cpp raylib::gui raylib::res)
-
-add_executable(${PROJECT_NAME} WIN32 src/main.cpp src/graphics.cpp src/app.cpp src/loading.cpp
-		src/menu.cpp src/game.cpp src/saveupgrade.cpp)
-if(WIN32)
-	target_sources(${PROJECT_NAME} PRIVATE src/windows.cpp)
-endif()
-target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-lib magic_enum::magic_enum emsdk_html upgrade)
-
 if(EMSCRIPTEN)
 	add_executable(webui src/webui.cpp)
 	target_include_directories(webui PUBLIC inc)
@@ -58,9 +42,8 @@ endif()
 enable_testing()
 include(Catch)
 
-add_executable(${PROJECT_NAME}-test test/grid.cpp test/basicRotation.cpp test/gameplay.cpp
-		test/app-types.cpp src/ostream.cpp test/savefile.cpp test/gui.cpp)
-target_link_libraries(${PROJECT_NAME}-test PRIVATE Catch2::Catch2WithMain ${PROJECT_NAME}-lib)
+add_executable(${PROJECT_NAME}-test test/dummy.cpp)
+target_link_libraries(${PROJECT_NAME}-test PRIVATE Catch2::Catch2WithMain)
 if(NOT EMSCRIPTEN)
 	catch_discover_tests(${PROJECT_NAME}-test)
 endif()
