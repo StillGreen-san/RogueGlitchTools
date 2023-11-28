@@ -53,4 +53,11 @@ add_executable(rgt_test test/dummy.cpp)
 target_link_libraries(rgt_test PRIVATE Catch2::Catch2WithMain)
 if(NOT EMSCRIPTEN)
 	catch_discover_tests(rgt_test)
+	add_custom_target(rgt_test_data)
+	add_custom_command(TARGET rgt_test_data COMMAND ${CMAKE_COMMAND} -E copy_if_different
+			${CMAKE_CURRENT_SOURCE_DIR}/test/data/SaveData.glitch
+			${CMAKE_CURRENT_SOURCE_DIR}/test/data/SaveData__Deluxe.glitch
+			$<TARGET_FILE_DIR:rgt_test>
+	)
+	add_dependencies(rgt_test rgt_test_data)
 endif()
