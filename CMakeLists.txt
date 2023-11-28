@@ -21,6 +21,11 @@ if(EMSCRIPTEN)
 	set_target_properties(rgt_wasm PROPERTIES SUFFIX ".wasm")
 endif()
 
+add_library(rgt_crypto src/crypto.cpp)
+target_include_directories(rgt_crypto PUBLIC inc)
+target_compile_features(rgt_crypto PUBLIC cxx_std_17)
+target_link_libraries(rgt_crypto PRIVATE cryptopp::cryptopp)
+
 add_library(rgt_upgrade src/RogueGlitchDencrypter.cpp)
 target_include_directories(rgt_upgrade PUBLIC inc)
 target_compile_features(rgt_upgrade PUBLIC cxx_std_17)
