@@ -2,13 +2,6 @@ cmake_minimum_required(VERSION 3.25)
 
 project(RogueGlitchTools CXX)
 
-if(EMSCRIPTEN)
-	add_library(rgt_wasm INTERFACE)
-	target_compile_options(rgt_wasm INTERFACE -sNO_DISABLE_EXCEPTION_CATCHING)
-	target_link_options(rgt_wasm INTERFACE -sSTACK_SIZE=2MB --no-entry -lembind)
-	set_target_properties(rgt_wasm PROPERTIES SUFFIX ".wasm")
-endif()
-
 find_package(Catch2 3 CONFIG REQUIRED)
 find_package(cryptopp CONFIG REQUIRED)
 
@@ -20,6 +13,13 @@ option(ENABLE_INCLUDE_WHAT_YOU_USE "Enable static analysis with include-what-you
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerWarnings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProjectSettings.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/StaticAnalyzers.cmake)
+
+if(EMSCRIPTEN)
+	add_library(rgt_wasm INTERFACE)
+	target_compile_options(rgt_wasm INTERFACE -sNO_DISABLE_EXCEPTION_CATCHING)
+	target_link_options(rgt_wasm INTERFACE -sSTACK_SIZE=2MB --no-entry -lembind)
+	set_target_properties(rgt_wasm PROPERTIES SUFFIX ".wasm")
+endif()
 
 add_library(rgt_upgrade src/RogueGlitchDencrypter.cpp)
 target_include_directories(rgt_upgrade PUBLIC inc)
