@@ -34,11 +34,6 @@ add_library(rgt_convert src/convert.cpp)
 target_include_directories(rgt_convert PUBLIC inc)
 target_compile_features(rgt_convert PUBLIC cxx_std_17)
 
-add_library(rgt_upgrade src/RogueGlitchDencrypter.cpp)
-target_include_directories(rgt_upgrade PUBLIC inc)
-target_compile_features(rgt_upgrade PUBLIC cxx_std_17)
-target_link_libraries(rgt_upgrade PRIVATE cryptopp::cryptopp)
-
 if(EMSCRIPTEN)
 	add_executable(rgt_webui src/webui.cpp)
 	target_include_directories(rgt_webui PUBLIC inc)
