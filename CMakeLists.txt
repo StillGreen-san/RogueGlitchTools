@@ -42,7 +42,7 @@ target_link_libraries(rgt_upgrade PRIVATE cryptopp::cryptopp)
 if(EMSCRIPTEN)
 	add_executable(rgt_webui src/webui.cpp)
 	target_include_directories(rgt_webui PUBLIC inc)
-	target_link_libraries(rgt_webui PRIVATE rgt_wasm rgt_upgrade)
+	target_link_libraries(rgt_webui PRIVATE rgt_wasm rgt_crypto rgt_convert)
 	add_custom_target(rgt_webui.html)
 	add_custom_command(TARGET rgt_webui.html COMMAND ${CMAKE_COMMAND}
 			-E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/src/webui.html $<TARGET_FILE_DIR:rgt_webui>
