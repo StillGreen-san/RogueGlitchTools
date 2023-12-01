@@ -4,5 +4,5 @@
 
 namespace rgt
 {
-DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> save);
+DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave);
 } // namespace rgt

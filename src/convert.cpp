@@ -46,7 +46,7 @@ constexpr std::array<ReplacementInfo, 3> itemReplacements{{
     {"FireRateUpOnCrit", "CritRing"},   //
     {"SuperJumpBoots", "BoostedJumps"}, //
 }};
-constexpr std::array<ReplacementInfo, 8> challengeRplacements{{
+constexpr std::array<ReplacementInfo, 8> challengeReplacements{{
     {"Boxing Champ", "BoxingChamp"},                //
     {"Mountain of Corpses", "MountainOfCorpses"},   //
     {"No Fear!", "NoFear"},                         //
@@ -77,21 +77,21 @@ constexpr std::array<ReplacementInfo, 14> replacements{{
 
 namespace rgt
 {
-DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> save)
+DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave)
 {
 	for(const auto& [oldThing, newThing] : replacements)
 	{
 		size_t offset = 0;
 		while(true)
 		{
-			offset = save.find(oldThing, offset);
+			offset = legacySave.find(oldThing, offset);
 			if(offset == std::string::npos)
 			{
 				break;
 			}
-			save.replace(offset, oldThing.size(), newThing);
+			legacySave.replace(offset, oldThing.size(), newThing);
 		}
 	}
-	return {std::move(save)};
+	return {std::move(legacySave)};
 }
 } // namespace rgt
