@@ -4,6 +4,7 @@ project(RogueGlitchTools CXX)
 
 find_package(Catch2 3 CONFIG REQUIRED)
 find_package(cryptopp CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
 option(ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
@@ -33,6 +34,7 @@ target_link_libraries(rgt_crypto PRIVATE cryptopp::cryptopp)
 add_library(rgt_convert src/convert.cpp)
 target_include_directories(rgt_convert PUBLIC inc)
 target_compile_features(rgt_convert PUBLIC cxx_std_17)
+target_link_libraries(rgt_convert PRIVATE nlohmann_json::nlohmann_json)
 
 if(EMSCRIPTEN)
 	add_executable(rgt_webui src/webui.cpp)
