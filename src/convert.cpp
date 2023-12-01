@@ -1,11 +1,13 @@
 #include "convert.hpp"
 #include "types.hpp"
 
+#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
+
+#include <algorithm>
 #include <array>
-#include <cstddef>
 #include <string>
 #include <string_view>
-#include <utility>
 
 namespace
 {
@@ -57,41 +59,48 @@ constexpr std::array<ReplacementInfo, 8> challengeReplacements{{
     {"The Stomper!", "TheStomper"},                 //
 }};
 
-constexpr std::array<ReplacementInfo, 14> replacements{{
-    {"System.Int32,mscorlib", "int"},               //
-    {"System.Boolean,mscorlib", "bool"},            //
-    {"DarkMissiles", "ViralInfection"},             //
-    {"FireRateUpOnCrit", "CritRing"},               //
-    {"SuperJumpBoots", "BoostedJumps"},             //
-    {"Boxing Champ", "BoxingChamp"},                //
-    {"Mountain of Corpses", "MountainOfCorpses"},   //
-    {"No Fear!", "NoFear"},                         //
-    {"Out of stock", "OutOfStock"},                 //
-    {"Secret Room", "SecretRoom"},                  //
-    {"Something to cool your anger...", "IceCube"}, //
-    {"Teamwork Needed!", "TeamworkNeeded"},         //
-    {"The Stomper!", "TheStomper"},                 //
-    {"Version=2.0.0.0", "Version=4.0.0.0"}          //
-}};
+auto find(nlohmann::json& json, std::string_view view)
+{
+	return std::find_if(json.begin(), json.end(),
+	    [view](nlohmann::json& jsonItem)
+	    {
+		    return *jsonItem.get_ptr<std::string*>() == view;
+	    });
+}
+
+template<typename TCollection>
+void replace(nlohmann::json& json, std::string_view key, const TCollection& collection)
+{
+	auto challengesItem = json[key]["value"];
+	for(const auto& [oldThing, newThing] : collection)
+	{
+		auto oldVal = find(challengesItem, oldThing);
+		if(oldVal != challengesItem.end())
+		{
+			*oldVal = newThing;
+		}
+	}
+}
 } // namespace
 
 namespace rgt
 {
-DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave)
+DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave) // NOLINT(*-value-param) resource is moved out
 {
-	for(const auto& [oldThing, newThing] : replacements)
+	nlohmann::json ultraJson = nlohmann::json::parse(ultraBaseSave);
+	nlohmann::json legacyJson = nlohmann::json::parse(legacySave);
+
+	for(const auto& legacyItem : legacyJson.items())
 	{
-		size_t offset = 0;
-		while(true)
+		if(const auto ultraItem = ultraJson.find(legacyItem.key()); ultraItem != ultraJson.end())
 		{
-			offset = legacySave.find(oldThing, offset);
-			if(offset == std::string::npos)
-			{
-				break;
-			}
-			legacySave.replace(offset, oldThing.size(), newThing);
+			ultraItem.value()["value"] = legacyItem.value()["value"];
 		}
 	}
-	return {std::move(legacySave)};
+
+	replace(ultraJson, "UnlockedItems_V2", itemReplacements);
+	replace(ultraJson, "ChallengesDone_V2", challengeReplacements);
+
+	return {ultraJson.dump()};
 }
 } // namespace rgt
