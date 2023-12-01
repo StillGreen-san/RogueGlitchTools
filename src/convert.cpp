@@ -15,13 +15,21 @@ struct ReplacementInfo
 	std::string_view newThing;
 };
 
-constexpr std::array<ReplacementInfo, 6> replacements{{
-    {"System.Int32,mscorlib", "int"},      //
-    {"System.Boolean,mscorlib", "bool"},   //
-    {"DarkMissiles", "ViralInfection"},    //
-    {"FireRateUpOnCrit", "CritRing"},      //
-    {"SuperJumpBoots", "BoostedJumps"},    //
-    {"Version=2.0.0.0", "Version=4.0.0.0"} //
+constexpr std::array<ReplacementInfo, 14> replacements{{
+    {"System.Int32,mscorlib", "int"},               //
+    {"System.Boolean,mscorlib", "bool"},            //
+    {"DarkMissiles", "ViralInfection"},             //
+    {"FireRateUpOnCrit", "CritRing"},               //
+    {"SuperJumpBoots", "BoostedJumps"},             //
+    {"Boxing Champ", "BoxingChamp"},                //
+    {"Mountain of Corpses", "MountainOfCorpses"},   //
+    {"No Fear!", "NoFear"},                         //
+    {"Out of stock", "OutOfStock"},                 //
+    {"Secret Room", "SecretRoom"},                  //
+    {"Something to cool your anger...", "IceCube"}, //
+    {"Teamwork Needed!", "TeamworkNeeded"},         //
+    {"The Stomper!", "TheStomper"},                 //
+    {"Version=2.0.0.0", "Version=4.0.0.0"}          //
 }};
 } // namespace
 
