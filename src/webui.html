@@ -104,6 +104,7 @@
             const out = new Blob([data], {type: 'application/octet-stream'});
             downloadBlob(out, 'SaveData__Deluxe.glitch');
             upgraded.delete();
+            this.value = null;
         }
     }
 
