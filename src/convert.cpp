@@ -48,7 +48,7 @@ constexpr std::array<ReplacementInfo, 3> itemReplacements{{
     {"FireRateUpOnCrit", "CritRing"},   //
     {"SuperJumpBoots", "BoostedJumps"}, //
 }};
-constexpr std::array<ReplacementInfo, 8> challengeReplacements{{
+constexpr std::array<ReplacementInfo, 9> challengeReplacements{{
     {"Boxing Champ", "BoxingChamp"},                //
     {"Mountain of Corpses", "MountainOfCorpses"},   //
     {"No Fear!", "NoFear"},                         //
@@ -57,6 +57,7 @@ constexpr std::array<ReplacementInfo, 8> challengeReplacements{{
     {"Something to cool your anger...", "IceCube"}, //
     {"Teamwork Needed!", "TeamworkNeeded"},         //
     {"The Stomper!", "TheStomper"},                 //
+    {"Bomb Specialist", "BombSpecialist"},          //
 }};
 
 auto find(nlohmann::json& json, std::string_view view)
@@ -71,7 +72,7 @@ auto find(nlohmann::json& json, std::string_view view)
 template<typename TCollection>
 void replace(nlohmann::json& json, std::string_view key, const TCollection& collection)
 {
-	auto challengesItem = json[key]["value"];
+	auto& challengesItem = json[key]["value"];
 	for(const auto& [oldThing, newThing] : collection)
 	{
 		auto oldVal = find(challengesItem, oldThing);
