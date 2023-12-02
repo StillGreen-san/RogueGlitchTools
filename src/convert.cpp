@@ -43,21 +43,24 @@ struct ReplacementInfo
 	std::string_view newThing;
 };
 
+constexpr std::string_view valueKey = "value";
+constexpr std::string_view itemsKey = "UnlockedItems_V2";
+constexpr std::string_view challengesKey = "ChallengesDone_V2";
 constexpr std::array<ReplacementInfo, 3> itemReplacements{{
-    {"DarkMissiles", "ViralInfection"}, //
-    {"FireRateUpOnCrit", "CritRing"},   //
-    {"SuperJumpBoots", "BoostedJumps"}, //
+    {"DarkMissiles", "ViralInfection"},
+    {"FireRateUpOnCrit", "CritRing"},
+    {"SuperJumpBoots", "BoostedJumps"},
 }};
 constexpr std::array<ReplacementInfo, 9> challengeReplacements{{
-    {"Boxing Champ", "BoxingChamp"},                //
-    {"Mountain of Corpses", "MountainOfCorpses"},   //
-    {"No Fear!", "NoFear"},                         //
-    {"Out of stock", "OutOfStock"},                 //
-    {"Secret Room", "SecretRoom"},                  //
-    {"Something to cool your anger...", "IceCube"}, //
-    {"Teamwork Needed!", "TeamworkNeeded"},         //
-    {"The Stomper!", "TheStomper"},                 //
-    {"Bomb Specialist", "BombSpecialist"},          //
+    {"Boxing Champ", "BoxingChamp"},
+    {"Mountain of Corpses", "MountainOfCorpses"},
+    {"No Fear!", "NoFear"},
+    {"Out of stock", "OutOfStock"},
+    {"Secret Room", "SecretRoom"},
+    {"Something to cool your anger...", "IceCube"},
+    {"Teamwork Needed!", "TeamworkNeeded"},
+    {"The Stomper!", "TheStomper"},
+    {"Bomb Specialist", "BombSpecialist"},
 }};
 
 auto find(nlohmann::json& json, std::string_view view)
@@ -72,11 +75,11 @@ auto find(nlohmann::json& json, std::string_view view)
 template<typename TCollection>
 void replace(nlohmann::json& json, std::string_view key, const TCollection& collection)
 {
-	auto& challengesItem = json[key]["value"];
+	auto& array = json[key][valueKey];
 	for(const auto& [oldThing, newThing] : collection)
 	{
-		auto oldVal = find(challengesItem, oldThing);
-		if(oldVal != challengesItem.end())
+		auto oldVal = find(array, oldThing);
+		if(oldVal != array.end())
 		{
 			*oldVal = newThing;
 		}
@@ -96,12 +99,12 @@ DecryptedSave<Ultra> upgrade(
 	{
 		if(const auto ultraItem = ultraJson.find(legacyItem.key()); ultraItem != ultraJson.end())
 		{
-			ultraItem.value()["value"] = legacyItem.value()["value"];
+			ultraItem.value()[valueKey] = legacyItem.value()[valueKey];
 		}
 	}
 
-	replace(ultraJson, "UnlockedItems_V2", itemReplacements);
-	replace(ultraJson, "ChallengesDone_V2", challengeReplacements);
+	replace(ultraJson, itemsKey, itemReplacements);
+	replace(ultraJson, challengesKey, challengeReplacements);
 
 	return {ultraJson.dump()};
 }
