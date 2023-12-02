@@ -38,6 +38,14 @@
             padding: 1em 0;
             text-align: left;
         }
+
+        td {
+            vertical-align: baseline;
+        }
+
+        .tDescription {
+            background: #ccc;
+        }
     </style>
 </head>
 
@@ -50,6 +58,22 @@
         <div class="container">
             <label for="fileInput"><strong>Drop Savegame Here</strong></label>
             <input type="file" id="fileInput"/>
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="checkbox" id="oldDefaults"/>
+                        <label for="oldDefaults">Unlock Old Defaults</label>
+                    </td>
+                    <td class="tDescription">
+                        Items unlocked by default have changed <br/>
+                        in Ultra this option explicitly unlocks <br/>
+                        them as they are not part of the save file
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
         </div>
         <hr/>
         <div class="container">
