@@ -46,6 +46,16 @@ struct ReplacementInfo
 constexpr std::string_view valueKey = "value";
 constexpr std::string_view itemsKey = "UnlockedItems_V2";
 constexpr std::string_view challengesKey = "ChallengesDone_V2";
+constexpr std::array<std::string_view, 8> oldDefaultItems{
+    "HookRope",
+    "AllStatsUp",
+    "ShieldedShots",
+    "LavaBoots",
+    "Drone_101",
+    "ProjectileShield",
+    "DamageUpLarge",
+    "FasterShots",
+};
 constexpr std::array<ReplacementInfo, 3> itemReplacements{{
     {"DarkMissiles", "ViralInfection"},
     {"FireRateUpOnCrit", "CritRing"},
@@ -85,6 +95,16 @@ void replace(nlohmann::json& json, std::string_view key, const TCollection& coll
 		}
 	}
 }
+
+template<typename TCollection>
+void append(nlohmann::json& json, std::string_view key, const TCollection& collection)
+{
+	auto& array = json[key][valueKey];
+	for(const auto& item : collection)
+	{
+		array += item;
+	}
+}
 } // namespace
 
 namespace rgt
@@ -105,6 +125,11 @@ DecryptedSave<Ultra> upgrade(
 
 	replace(ultraJson, itemsKey, itemReplacements);
 	replace(ultraJson, challengesKey, challengeReplacements);
+
+	if(options & UpgradeOptionFlags::OldDefaults)
+	{
+		append(ultraJson, itemsKey, oldDefaultItems);
+	}
 
 	return {ultraJson.dump()};
 }

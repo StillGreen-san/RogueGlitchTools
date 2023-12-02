@@ -13,9 +13,9 @@ inline UpgradeOptionFlags operator|(UpgradeOptionFlags lhs, UpgradeOptionFlags r
 {
 	return static_cast<UpgradeOptionFlags>(static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs));
 }
-inline UpgradeOptionFlags operator&(UpgradeOptionFlags lhs, UpgradeOptionFlags rhs)
+inline bool operator&(UpgradeOptionFlags lhs, UpgradeOptionFlags rhs)
 {
-	return static_cast<UpgradeOptionFlags>(static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
+	return static_cast<bool>(static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
 }
 
 DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave, UpgradeOptionFlags options);
