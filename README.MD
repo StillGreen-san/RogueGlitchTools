@@ -7,6 +7,11 @@ various tool for the game Rogue Glitch (Ultra)
 ## dependencies
 
 - [cryptopp](https://github.com/weidai11/cryptopp) [[BSL](https://github.com/weidai11/cryptopp/blob/master/License.txt)]
+- [nlohmann json](https://github.com/nlohmann/json) [[MIT](https://github.com/nlohmann/json/blob/develop/LICENSE.MIT)]
+
+#### wasm toolchain
+
+- [emscripten](https://emscripten.org/index.html)
 
 #### testing only
 
