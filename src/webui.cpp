@@ -33,4 +33,8 @@ EMSCRIPTEN_BINDINGS(std)
 EMSCRIPTEN_BINDINGS(rgt)
 {
 	emscripten::function("tryUpgrade", &tryUpgrade);
+
+	emscripten::enum_<rgt::UpgradeOptionFlags>("UpgradeOptions")     //
+	    .value("None", rgt::UpgradeOptionFlags::None)                //
+	    .value("OldDefaults", rgt::UpgradeOptionFlags::OldDefaults); //
 }
