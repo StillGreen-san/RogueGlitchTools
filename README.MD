@@ -1,8 +1,8 @@
 # RogueGlitchTools
 
-various tool for the game Rogue Glitch (Ultra)
+various tools for the game Rogue Glitch (Ultra)
 
-[save upgrade webapp](https://sgs.moe/rogueglitchsaveupgrade/)
+[save upgrade webapp](https://sgs.moe/rogueglitchtools/)
 
 ## dependencies
 
