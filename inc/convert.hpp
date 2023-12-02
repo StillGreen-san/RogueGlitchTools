@@ -18,5 +18,5 @@ inline UpgradeOptionFlags operator&(UpgradeOptionFlags lhs, UpgradeOptionFlags r
 	return static_cast<UpgradeOptionFlags>(static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
 }
 
-DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave);
+DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave, UpgradeOptionFlags options);
 } // namespace rgt

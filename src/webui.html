@@ -117,7 +117,8 @@
     async function handleFiles() {
         if (this.files.length >= 1) {
             const fileContent = await this.files[0].arrayBuffer();
-            const upgraded = Module.tryUpgrade(fileContent);
+            const options = gatherUpgradeOptions();
+            const upgraded = Module.tryUpgrade(fileContent, options);
             const data = new Uint8Array({
                 [Symbol.iterator]: function* () {
                     for (let i = 0; i < upgraded.size(); i++) {
@@ -130,6 +131,16 @@
             upgraded.delete();
             this.value = null;
         }
+    }
+
+    function gatherUpgradeOptions() {
+        let options = checkOption();
+        options |= checkOption("oldDefaults", Module.UpgradeOptions.OldDefaults);
+        return options;
+    }
+
+    function checkOption(id = "", option) {
+        return document.getElementById(id)?.checked ? option.value : Module.UpgradeOptions.None.value;
     }
 
     function downloadBlob(blob, name) {

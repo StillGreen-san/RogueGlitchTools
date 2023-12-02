@@ -86,7 +86,8 @@ void replace(nlohmann::json& json, std::string_view key, const TCollection& coll
 
 namespace rgt
 {
-DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave) // NOLINT(*-value-param) resource is moved out
+DecryptedSave<Ultra> upgrade(
+    DecryptedSave<Legacy> legacySave, UpgradeOptionFlags options) // NOLINT(*-value-param) resource is moved out
 {
 	nlohmann::json ultraJson = nlohmann::json::parse(ultraBaseSave);
 	nlohmann::json legacyJson = nlohmann::json::parse(legacySave);
