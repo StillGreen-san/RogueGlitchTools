@@ -41,7 +41,7 @@ TEMPLATE_TEST_CASE("crypto integration", "", Tag<Legacy>, Tag<Ultra>)
 
 	const std::vector<unsigned char> file = loadFile(TFilePath);
 
-	const std::variant decryptedResult = tryDecrypt(file.data(), file.size());
+	const std::variant decryptedResult = tryDecrypt(file.data(), static_cast<unsigned int>(file.size()));
 
 	REQUIRE(std::holds_alternative<DecryptedSave<TVersion>>(decryptedResult));
 
@@ -51,7 +51,8 @@ TEMPLATE_TEST_CASE("crypto integration", "", Tag<Legacy>, Tag<Ultra>)
 
 	EncryptedSave<TVersion> encryptedSave = encrypt(decryptedSave);
 
-	const std::variant reDecryptedResult = tryDecrypt(encryptedSave.data(), encryptedSave.size());
+	const std::variant reDecryptedResult =
+	    tryDecrypt(encryptedSave.data(), static_cast<unsigned int>(encryptedSave.size()));
 
 	REQUIRE(std::holds_alternative<DecryptedSave<TVersion>>(reDecryptedResult));
 
