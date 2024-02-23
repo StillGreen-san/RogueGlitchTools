@@ -60,3 +60,11 @@ TEMPLATE_TEST_CASE("convert integration", "", Tag<Legacy>, Tag<Ultra>)
 	REQUIRE(upgradedSaveWithOldDefaults.find(unexpectedItem) == std::string::npos);
 	REQUIRE(upgradedSaveWithOldDefaults.find(unexpectedChallenge) == std::string::npos);
 }
+
+TEST_CASE("tryDetectVersion")
+{
+	REQUIRE(tryDetectVersion(std::string{ULTRA_FILE_PATH}, loadFile(ULTRA_FILE_PATH)) == Ultra);
+	REQUIRE(tryDetectVersion(std::string{LEGACY_FILE_PATH}, loadFile(LEGACY_FILE_PATH)) == Legacy);
+	REQUIRE(tryDetectVersion(std::string{LEGACY_USED_FILE_PATH}, loadFile(LEGACY_USED_FILE_PATH)) == Legacy);
+	REQUIRE(tryDetectVersion("some.file.json", "{\"WinStreak\" : { \"__type\" : \"int\", \"value\" : 0 }}") == Unknown);
+}

@@ -2,6 +2,8 @@
 
 #include "types.hpp"
 
+#include <string>
+
 namespace rgt
 {
 enum class UpgradeOptionFlags : unsigned
@@ -17,6 +19,8 @@ inline bool operator&(UpgradeOptionFlags lhs, UpgradeOptionFlags rhs)
 {
 	return static_cast<bool>(static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
 }
+
+Version tryDetectVersion(const std::string& fileName, const std::string& content);
 
 DecryptedSave<Ultra> upgrade(DecryptedSave<Legacy> legacySave, UpgradeOptionFlags options);
 } // namespace rgt

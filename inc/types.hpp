@@ -9,6 +9,7 @@ enum Version : std::uint8_t
 {
 	Legacy,
 	Ultra,
+	Unknown,
 };
 
 template<Version TVersion>
