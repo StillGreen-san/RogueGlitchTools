@@ -10,7 +10,6 @@
 #include <string>
 #include <string_view>
 #include <variant>
-#include <vector>
 
 using namespace rgt;
 
@@ -35,13 +34,13 @@ TEMPLATE_TEST_CASE("crypto integration", "", Tag<Legacy>, Tag<Ultra>)
 	constexpr Version TVersion = TestType::version;
 	constexpr std::string_view TFilePath = TestType::filePath;
 
-	const std::variant decryptedFailResult = tryDecrypt(nullptr, 0);
+	const std::variant decryptedFailResult = tryDecrypt({});
 
 	REQUIRE(std::holds_alternative<std::nullopt_t>(decryptedFailResult));
 
-	const std::vector<unsigned char> file = loadFile(TFilePath);
+	const std::string file = loadFile(TFilePath);
 
-	const std::variant decryptedResult = tryDecrypt(file.data(), static_cast<unsigned int>(file.size()));
+	const std::variant decryptedResult = tryDecrypt(file);
 
 	REQUIRE(std::holds_alternative<DecryptedSave<TVersion>>(decryptedResult));
 
@@ -51,8 +50,7 @@ TEMPLATE_TEST_CASE("crypto integration", "", Tag<Legacy>, Tag<Ultra>)
 
 	EncryptedSave<TVersion> encryptedSave = encrypt(decryptedSave);
 
-	const std::variant reDecryptedResult =
-	    tryDecrypt(encryptedSave.data(), static_cast<unsigned int>(encryptedSave.size()));
+	const std::variant reDecryptedResult = tryDecrypt(encryptedSave);
 
 	REQUIRE(std::holds_alternative<DecryptedSave<TVersion>>(reDecryptedResult));
 

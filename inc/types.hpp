@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <string>
-#include <vector>
 
 namespace rgt
 {
@@ -17,7 +16,7 @@ class DecryptedSave : public std::string
 {
 };
 template<Version TVersion>
-class EncryptedSave : public std::vector<unsigned char>
+class EncryptedSave : public std::string
 {
 };
 } // namespace rgt

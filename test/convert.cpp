@@ -10,7 +10,6 @@
 #include <string>
 #include <string_view>
 #include <variant>
-#include <vector>
 
 using namespace rgt;
 
@@ -38,9 +37,9 @@ TEMPLATE_TEST_CASE("convert integration", "", Tag<Legacy>, Tag<Ultra>)
 	constexpr Version TVersion = TestType::version;
 	constexpr std::string_view TFilePath = TestType::filePath;
 
-	const std::vector<unsigned char> file = loadFile(TFilePath);
+	const std::string file = loadFile(TFilePath);
 
-	const std::variant decryptedResult = tryDecrypt(file.data(), static_cast<unsigned int>(file.size()));
+	const std::variant decryptedResult = tryDecrypt(file);
 
 	REQUIRE(std::holds_alternative<DecryptedSave<TVersion>>(decryptedResult));
 

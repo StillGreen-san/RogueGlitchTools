@@ -1,9 +1,9 @@
 #pragma once
 
 #include <filesystem>
-#include <vector>
+#include <string>
 
 namespace rgt
 {
-std::vector<unsigned char> loadFile(const std::filesystem::path& path);
+std::string loadFile(const std::filesystem::path& path);
 } // namespace rgt

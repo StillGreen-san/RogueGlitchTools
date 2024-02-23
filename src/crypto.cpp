@@ -9,7 +9,6 @@
 #include <string>
 #include <utility>
 #include <variant>
-#include <vector>
 
 #include <cryptopp/aes.h>
 #include <cryptopp/config_int.h>
@@ -55,13 +54,14 @@ const std::array<KeyInfo, 2> ES_KEYS = [] // NOLINT(*-statically-constructed-obj
 
 namespace rgt
 {
-std::variant<DecryptedSave<Legacy>, DecryptedSave<Ultra>, std::nullopt_t> tryDecrypt(
-    const unsigned char* data, unsigned size)
+std::variant<DecryptedSave<Legacy>, DecryptedSave<Ultra>, std::nullopt_t> tryDecrypt(const std::string& content)
 {
-	if(data == nullptr || size <= CRYPT_BUFSIZE)
+	if(content.size() <= CRYPT_BUFSIZE)
 	{
 		return std::nullopt;
 	}
+	const byte* data = reinterpret_cast<const byte*>(content.data());
+	const size_t size = content.size();
 
 	for(const auto [version, key] : ES_KEYS)
 	{
@@ -99,7 +99,7 @@ std::variant<DecryptedSave<Legacy>, DecryptedSave<Ultra>, std::nullopt_t> tryDec
 	return std::nullopt;
 }
 
-std::vector<unsigned char> encrypt(const std::string& save, Version version)
+std::string encrypt(const std::string& save, Version version)
 {
 	std::array<byte, CRYPT_BUFSIZE> ivBuffer; // NOLINT(*-member-init) initialized below
 	CryptoPP::AutoSeededRandomPool rng;
@@ -116,14 +116,14 @@ std::vector<unsigned char> encrypt(const std::string& save, Version version)
 
 	encrypter.SetKeyWithIV(keyBuffer.data(), keyBuffer.size(), ivBuffer.data(), ivBuffer.size());
 
-	std::vector<unsigned char> outVec;
+	std::string outString;
 
-	outVec.insert(outVec.begin(), ivBuffer.begin(), ivBuffer.end());
+	outString.insert(outString.begin(), ivBuffer.begin(), ivBuffer.end());
 
 	const CryptoPP::StringSource encryptPipeline(
-	    save, true, new CryptoPP::StreamTransformationFilter(encrypter, new CryptoPP::VectorSink(outVec)));
+	    save, true, new CryptoPP::StreamTransformationFilter(encrypter, new CryptoPP::StringSink(outString)));
 
-	return outVec;
+	return outString;
 }
 
 template<>

@@ -14,8 +14,7 @@
 
 std::vector<unsigned char> tryUpgrade(const std::string& fileContent, unsigned options)
 {
-	std::variant decryptedResult =
-	    rgt::tryDecrypt(reinterpret_cast<const unsigned char*>(fileContent.data()), fileContent.size());
+	std::variant decryptedResult = rgt::tryDecrypt(fileContent);
 	if(!std::holds_alternative<rgt::DecryptedSave<rgt::Legacy>>(decryptedResult))
 	{
 		return {};
@@ -23,7 +22,8 @@ std::vector<unsigned char> tryUpgrade(const std::string& fileContent, unsigned o
 	const rgt::DecryptedSave<rgt::Ultra> upgradedSave =
 	    rgt::upgrade(std::move(std::get<rgt::DecryptedSave<rgt::Legacy>>(decryptedResult)),
 	        static_cast<rgt::UpgradeOptionFlags>(options));
-	return rgt::encrypt(upgradedSave);
+	const rgt::EncryptedSave<rgt::Ultra> encryptedSave = rgt::encrypt(upgradedSave);
+	return {encryptedSave.begin(), encryptedSave.end()};
 }
 
 EMSCRIPTEN_BINDINGS(std)
