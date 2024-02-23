@@ -47,6 +47,13 @@ if(EMSCRIPTEN)
 	add_dependencies(rgt_webui rgt_webui.html)
 endif()
 
+if(NOT EMSCRIPTEN)
+	add_executable(rgt_converter src/converter.cpp)
+	target_include_directories(rgt_converter PUBLIC inc)
+	target_compile_features(rgt_converter PUBLIC cxx_std_17)
+	target_link_libraries(rgt_converter PRIVATE rgt_common rgt_crypto rgt_convert)
+endif()
+
 enable_testing()
 include(Catch)
 

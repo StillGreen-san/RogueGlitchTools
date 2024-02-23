@@ -4,6 +4,8 @@ various tool for the game Rogue Glitch (Ultra)
 
 [save upgrade webapp](https://sgs.moe/rogueglitchsaveupgrade/)
 
+savegame de/encrypter
+
 ## dependencies
 
 - [cryptopp](https://github.com/weidai11/cryptopp) [[BSL](https://github.com/weidai11/cryptopp/blob/master/License.txt)]
