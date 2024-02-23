@@ -50,13 +50,14 @@ endif()
 enable_testing()
 include(Catch)
 
-add_executable(rgt_test test/crypto.cpp)
-target_link_libraries(rgt_test PRIVATE rgt_crypto rgt_common Catch2::Catch2WithMain)
+add_executable(rgt_test test/crypto.cpp test/convert.cpp)
+target_link_libraries(rgt_test PRIVATE rgt_crypto rgt_common rgt_convert Catch2::Catch2WithMain)
 if(NOT EMSCRIPTEN)
 	catch_discover_tests(rgt_test)
 	add_custom_target(rgt_test_data)
 	add_custom_command(TARGET rgt_test_data COMMAND ${CMAKE_COMMAND} -E copy_if_different
 			${CMAKE_CURRENT_SOURCE_DIR}/test/data/SaveData.glitch
+			${CMAKE_CURRENT_SOURCE_DIR}/test/data/SaveData.used.glitch
 			${CMAKE_CURRENT_SOURCE_DIR}/test/data/SaveData__Deluxe.glitch
 			$<TARGET_FILE_DIR:rgt_test>
 	)
