@@ -19,8 +19,6 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	//TODO print version info
-
 	std::filesystem::path file(argv[1]);
 
 	if(!std::filesystem::exists(file))

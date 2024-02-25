@@ -9,8 +9,6 @@
 #include <string>
 #include <string_view>
 
-// TODO handle challenges better/more_complete
-
 namespace
 {
 constexpr std::string_view ultraBaseSave = R"({
