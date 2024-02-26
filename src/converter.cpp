@@ -1,5 +1,6 @@
 #include "convert.hpp"
 #include "crypto.hpp"
+#include "dependency_info.hpp"
 #include "file.hpp"
 #include "types.hpp"
 
@@ -7,6 +8,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <variant>
 
@@ -19,7 +21,15 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	std::filesystem::path file(argv[1]);
+	const std::string_view argv1{argv[1]}; // NOLINT(*-pro-bounds-pointer-arithmetic)
+
+	if(argv1 == "--about")
+	{
+		std::cout << rgt::getAboutString();
+		return 0;
+	}
+
+	std::filesystem::path file(argv1);
 
 	if(!std::filesystem::exists(file))
 	{
