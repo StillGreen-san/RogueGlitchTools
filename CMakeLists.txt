@@ -22,7 +22,7 @@ if(EMSCRIPTEN)
 	set_target_properties(rgt_wasm PROPERTIES SUFFIX ".wasm")
 endif()
 
-add_library(rgt_common src/file.cpp)
+add_library(rgt_common src/file.cpp src/dependency_info.cpp)
 target_include_directories(rgt_common PUBLIC inc)
 target_compile_features(rgt_common PUBLIC cxx_std_17)
 
