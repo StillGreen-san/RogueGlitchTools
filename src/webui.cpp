@@ -1,5 +1,6 @@
 #include "convert.hpp"
 #include "crypto.hpp"
+#include "dependency_info.hpp"
 #include "types.hpp"
 
 #ifdef __EMSCRIPTEN__
@@ -34,6 +35,7 @@ EMSCRIPTEN_BINDINGS(std)
 EMSCRIPTEN_BINDINGS(rgt)
 {
 	emscripten::function("tryUpgrade", &tryUpgrade);
+	emscripten::function("getAboutString", &rgt::getAboutString);
 
 	emscripten::enum_<rgt::UpgradeOptionFlags>("UpgradeOptions")     //
 	    .value("None", rgt::UpgradeOptionFlags::None)                //
