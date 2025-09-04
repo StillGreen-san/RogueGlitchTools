@@ -8,26 +8,28 @@
     <style>
         :root {
             --primary-bg: #ffffff;
-            --secondary-bg: #f9f9f9;
+            --secondary-bg: #EBEBEB;
             --text-color: #333333;
-            --accent-color: #007bff;
             --border-color: #cccccc;
-            --muted-text: #666666;
-            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --muted-text: #424242;
             --border-radius: 8px;
             --transition: all 0.2s ease;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow: 0 4px 8px var(--shadow-color);
+            --accent-color-base: #007bff;
+            --accent-color: var(--accent-color-base);
+            --accent-dark: hsl(from var(--accent-color-base) calc(h + 9) s calc(l - 15));
+            --focus-shadow-color: rgba(from var(--accent-color-base) r g b 0.25);
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --primary-bg: #1a1a1a;
-                --secondary-bg: #2d2d2d;
-                --text-color: #e0e0e0;
-                --accent-color: #4dabf7;
-                --border-color: #404040;
-                --muted-text: #cccccc;
-                --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
+        html.dark {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2d2d2d;
+            --text-color: #e0e0e0;
+            --border-color: #404040;
+            --muted-text: #cccccc;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            --accent-color: hsl(from var(--accent-color-base) calc(h - 9) s l);
         }
 
         * {
@@ -65,7 +67,7 @@
 
         @media (max-width: 768px) {
             form {
-                max-width: 90%;
+                max-width: min(90vw, 600px);
             }
         }
 
@@ -89,7 +91,7 @@
         input[type=file]:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+            box-shadow: 0 0 5px var(--focus-shadow-color);
         }
 
         h1 {
@@ -98,6 +100,7 @@
             margin: 1.5rem 0 1rem;
             color: var(--text-color);
             font-weight: 300;
+            position: relative;
         }
 
         .formcontainer {
@@ -131,10 +134,13 @@
         }
 
         td {
-            vertical-align: top;
             padding: 1rem;
             border-radius: var(--border-radius);
             transition: var(--transition);
+        }
+
+        table td:first-child label {
+            display: inline;
         }
 
         input[type=checkbox] {
@@ -158,35 +164,35 @@
             margin: 0;
         }
 
-        li {
-            margin-bottom: 1.5rem;
-            border-left: 3px solid var(--accent-color);
-            padding-left: 1rem;
+        .changelog-item {
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--accent-color);
             background: var(--secondary-bg);
             border-radius: 0 var(--border-radius) var(--border-radius) 0;
             padding: 0.5rem 1rem;
             transition: var(--transition);
         }
 
-        li:hover {
+        .changelog-item:hover {
             background: var(--primary-bg);
             transform: translateX(5px);
         }
 
-        li ul {
+        .changelog-item ul {
             list-style-type: disc;
             margin-top: 0.5rem;
+            padding-left: 1rem;
         }
 
-        li ul li {
-            margin-bottom: 0.5rem;
+        .changelog-sub-item {
+            margin-bottom: 0.3rem;
             border: none;
             background: none;
-            padding-left: 1.5rem;
+            padding-left: 0;
             transform: none;
         }
 
-        li ul li:hover {
+        .changelog-sub-item:hover {
             background: none;
             transform: none;
         }
@@ -194,22 +200,15 @@
         .container:has(#changelog) {
             max-height: 400px;
             overflow-y: auto;
+            overflow-x: hidden;
             scroll-behavior: smooth;
-        }
-
-        .container:has(#changelog):after {
-            content: '';
-            display: block;
-            height: 50px;
-            background: linear-gradient(to top, var(--secondary-bg), transparent);
-            position: sticky;
-            bottom: 0;
-            pointer-events: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) var(--border-color);
         }
 
         img {
             border-radius: var(--border-radius);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px var(--shadow-color);
             margin-left: 0.5rem;
             transition: var(--transition);
         }
@@ -219,7 +218,7 @@
         }
 
         button {
-            background: linear-gradient(90deg, var(--accent-color), #0056b3);
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-dark));
             color: white;
             border: none;
             border-radius: var(--border-radius);
@@ -232,11 +231,16 @@
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 12px var(--shadow);
         }
 
         button:active {
             transform: translateY(0);
+        }
+
+        .theme-toggle {
+            padding: 4px 8px;
+            margin-left: 1rem;
         }
 
         div[style*="flex-end"] {
@@ -250,7 +254,8 @@
 <body>
 
     <form>
-        <h1>Rogue Glitch Save Upgrade</h1>
+        <h1>Rogue Glitch Save Upgrade<button type="button" class="theme-toggle" id="theme-toggle">🌙</button></h1>
+
         <div class="formcontainer">
             <hr />
             <div class="container">
@@ -283,33 +288,33 @@
                     </a>
                 </label>
                 <ul id="changelog">
-                    <li>v0.5 - Old but Gold
+                    <li class="changelog-item">v0.5 - Old but Gold
                         <ul>
-                            <li>add option to include legacy default items</li>
+                            <li class="changelog-sub-item">add option to include legacy default items</li>
                         </ul>
                     </li>
-                    <li>v0.4 - Proper Insertion
+                    <li class="changelog-item">v0.4 - Proper Insertion
                         <ul>
-                            <li><span>refactor upgrade logic<br />
+                            <li class="changelog-sub-item"><span>refactor upgrade logic<br />
                                     insert relevant data into ultra save<br />
                                     instead of upgrading in place</span></li>
                         </ul>
                     </li>
-                    <li>v0.3 - Serial Cleaner
+                    <li class="changelog-item">v0.3 - Serial Cleaner
                         <ul>
-                            <li>remove unused code</li>
-                            <li>some internal refactoring</li>
+                            <li class="changelog-sub-item">remove unused code</li>
+                            <li class="changelog-sub-item">some internal refactoring</li>
                         </ul>
                     </li>
-                    <li>v0.2 - Web Design is my Passion
+                    <li class="changelog-item">v0.2 - Web Design is my Passion
                         <ul>
-                            <li>simple html ui</li>
-                            <li>some internal refactoring</li>
+                            <li class="changelog-sub-item">simple html ui</li>
+                            <li class="changelog-sub-item">some internal refactoring</li>
                         </ul>
                     </li>
-                    <li>v0.1 - Hack Job
+                    <li class="changelog-item">v0.1 - Hack Job
                         <ul>
-                            <li>raylib prototype</li>
+                            <li class="changelog-sub-item">raylib prototype</li>
                         </ul>
                     </li>
                 </ul>
@@ -323,6 +328,20 @@
     <script src="rgt_webui.js"></script>
 
     <script>
+        const toggleButton = document.getElementById('theme-toggle');
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
+        toggleButton.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            setThemeEmoji();
+        });
+        const setThemeEmoji = () => {
+            if (document.documentElement.classList.contains('dark')) {
+                toggleButton.textContent = '🌞';
+            } else {
+                toggleButton.textContent = '🌙';
+            }
+        };
+        setThemeEmoji();
         const inputElement = document.getElementById("fileInput");
         inputElement.addEventListener("change", handleFiles, false);
 
