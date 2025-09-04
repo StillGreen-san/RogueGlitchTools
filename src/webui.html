@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rogue Glitch Savegame Upgrade</title>
     <style>
-        html, body {
+        html,
+        body {
             display: flex;
             justify-content: center;
         }
@@ -51,128 +52,128 @@
 
 <body>
 
-<form>
-    <h1>Rogue Glitch Save Upgrade</h1>
-    <div class="formcontainer">
-        <hr/>
-        <div class="container">
-            <label for="fileInput"><strong>Drop Savegame Here</strong></label>
-            <input type="file" id="fileInput"/>
-            <table>
-                <tbody>
-                <tr>
-                    <td>
-                        <input type="checkbox" id="oldDefaults"/>
-                        <label for="oldDefaults">Unlock Old Defaults</label>
-                    </td>
-                    <td class="tDescription">
-                        Items unlocked by default have changed <br/>
-                        in Ultra this option explicitly unlocks <br/>
-                        them as they are not part of the save file
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+    <form>
+        <h1>Rogue Glitch Save Upgrade</h1>
+        <div class="formcontainer">
+            <hr />
+            <div class="container">
+                <label for="fileInput"><strong>Drop Savegame Here</strong></label>
+                <input type="file" id="fileInput" />
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="oldDefaults" />
+                                <label for="oldDefaults">Unlock Old Defaults</label>
+                            </td>
+                            <td class="tDescription">
+                                Items unlocked by default have changed <br />
+                                in Ultra this option explicitly unlocks <br />
+                                them as they are not part of the save file
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
+            </div>
+            <hr />
+            <div class="container">
+                <label for="changelog">
+                    <strong>Changelog</strong>
+                    <a href="https://github.com/StillGreen-san/RogueGlitchTools">
+                        <img style="vertical-align: middle;"
+                            src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&amp;logo=github&amp;logoColor=white">
+                    </a>
+                </label>
+                <ul id="changelog">
+                    <li>v0.5 - Old but Gold
+                        <ul>
+                            <li>add option to include legacy default items</li>
+                        </ul>
+                    </li>
+                    <li>v0.4 - Proper Insertion
+                        <ul>
+                            <li><span>refactor upgrade logic<br />
+                                    insert relevant data into ultra save<br />
+                                    instead of upgrading in place</span></li>
+                        </ul>
+                    </li>
+                    <li>v0.3 - Serial Cleaner
+                        <ul>
+                            <li>remove unused code</li>
+                            <li>some internal refactoring</li>
+                        </ul>
+                    </li>
+                    <li>v0.2 - Web Design is my Passion
+                        <ul>
+                            <li>simple html ui</li>
+                            <li>some internal refactoring</li>
+                        </ul>
+                    </li>
+                    <li>v0.1 - Hack Job
+                        <ul>
+                            <li>raylib prototype</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div style="display: flex;justify-content: flex-end">
+                <button type="button" onclick="alert(Module.getAboutString())">About</button>
+            </div>
         </div>
-        <hr/>
-        <div class="container">
-            <label for="changelog">
-                <strong>Changelog</strong>
-                <a href="https://github.com/StillGreen-san/RogueGlitchTools">
-                    <img style="vertical-align: middle;"
-                         src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&amp;logo=github&amp;logoColor=white">
-                </a>
-            </label>
-            <ul id="changelog">
-                <li>v0.5 - Old but Gold
-                    <ul>
-                        <li>add option to include legacy default items</li>
-                    </ul>
-                </li>
-                <li>v0.4 - Proper Insertion
-                    <ul>
-                        <li><span>refactor upgrade logic<br/>
-                            insert relevant data into ultra save<br/>
-                            instead of upgrading in place</span></li>
-                    </ul>
-                </li>
-                <li>v0.3 - Serial Cleaner
-                    <ul>
-                        <li>remove unused code</li>
-                        <li>some internal refactoring</li>
-                    </ul>
-                </li>
-                <li>v0.2 - Web Design is my Passion
-                    <ul>
-                        <li>simple html ui</li>
-                        <li>some internal refactoring</li>
-                    </ul>
-                </li>
-                <li>v0.1 - Hack Job
-                    <ul>
-                        <li>raylib prototype</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div style="display: flex;justify-content: flex-end">
-            <button type="button" onclick="alert(Module.getAboutString())">About</button>
-        </div>
-    </div>
-</form>
+    </form>
 
-<script src="rgt_webui.js"></script>
+    <script src="rgt_webui.js"></script>
 
-<script>
-    const inputElement = document.getElementById("fileInput");
-    inputElement.addEventListener("change", handleFiles, false);
+    <script>
+        const inputElement = document.getElementById("fileInput");
+        inputElement.addEventListener("change", handleFiles, false);
 
-    async function handleFiles() {
-        if (this.files.length >= 1) {
-            const fileContent = await this.files[0].arrayBuffer();
-            const options = gatherUpgradeOptions();
-            const upgraded = Module.tryUpgrade(fileContent, options);
-            const data = new Uint8Array({
-                [Symbol.iterator]: function* () {
-                    for (let i = 0; i < upgraded.size(); i++) {
-                        yield upgraded.get(i);
+        async function handleFiles() {
+            if (this.files.length >= 1) {
+                const fileContent = await this.files[0].arrayBuffer();
+                const options = gatherUpgradeOptions();
+                const upgraded = Module.tryUpgrade(fileContent, options);
+                const data = new Uint8Array({
+                    [Symbol.iterator]: function* () {
+                        for (let i = 0; i < upgraded.size(); i++) {
+                            yield upgraded.get(i);
+                        }
                     }
-                }
-            });
-            const out = new Blob([data], {type: 'application/octet-stream'});
-            downloadBlob(out, 'SaveData__Deluxe.glitch');
-            upgraded.delete();
-            this.value = null;
+                });
+                const out = new Blob([data], { type: 'application/octet-stream' });
+                downloadBlob(out, 'SaveData__Deluxe.glitch');
+                upgraded.delete();
+                this.value = null;
+            }
         }
-    }
 
-    function gatherUpgradeOptions() {
-        let options = checkOption();
-        options |= checkOption("oldDefaults", Module.UpgradeOptions.OldDefaults);
-        return options;
-    }
+        function gatherUpgradeOptions() {
+            let options = checkOption();
+            options |= checkOption("oldDefaults", Module.UpgradeOptions.OldDefaults);
+            return options;
+        }
 
-    function checkOption(id = "", option) {
-        return document.getElementById(id)?.checked ? option.value : Module.UpgradeOptions.None.value;
-    }
+        function checkOption(id = "", option) {
+            return document.getElementById(id)?.checked ? option.value : Module.UpgradeOptions.None.value;
+        }
 
-    function downloadBlob(blob, name) {
-        const blobUrl = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = blobUrl;
-        link.download = name;
-        document.body.appendChild(link);
-        link.dispatchEvent(
-            new MouseEvent('click', {
-                bubbles: true,
-                cancelable: true,
-                view: window
-            })
-        );
-        document.body.removeChild(link);
-    }
-</script>
+        function downloadBlob(blob, name) {
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = name;
+            document.body.appendChild(link);
+            link.dispatchEvent(
+                new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window
+                })
+            );
+            document.body.removeChild(link);
+        }
+    </script>
 
 </body>
 
