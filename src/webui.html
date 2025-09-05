@@ -7,34 +7,24 @@
     <title>Rogue Glitch Savegame Upgrade</title>
     <style>
         :root {
-            --primary-bg: #ffffff;
-            --secondary-bg: #EBEBEB;
-            --text-color: #333333;
-            --border-color: #cccccc;
-            --muted-text: #424242;
+            color-scheme: light dark;
+            --primary-bg: light-dark(#ffffff, #1a1a1a);
+            --secondary-bg: light-dark(#EBEBEB, #2d2d2d);
+            --text-color: light-dark(#333333, #e0e0e0);
+            --border-color: light-dark(#cccccc, #404040);
+            --muted-text: light-dark(#424242, #cccccc);
             --border-radius: 8px;
             --transition: all 0.2s ease;
-            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-color: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
             --shadow: 0 4px 8px var(--shadow-color);
             --accent-color-base: #9400D3;
-            --accent-color: var(--accent-color-base);
-            --accent-dark: hsl(from var(--accent-color-base) calc(h + 9) s calc(l - 15));
+            --accent-color: light-dark(var(--accent-color-base), hsl(from var(--accent-color-base) calc(h - 9) s l));
+            --accent-dark: light-dark(hsl(from var(--accent-color-base) calc(h + 9) s calc(l - 15)), hsl(from var(--accent-color-base) calc(h + 9) s calc(l - 15)));
             --focus-shadow-color: rgba(from var(--accent-color-base) r g b 0.25);
-        }
-
-        html.dark {
-            --primary-bg: #1a1a1a;
-            --secondary-bg: #2d2d2d;
-            --text-color: #e0e0e0;
-            --border-color: #404040;
-            --muted-text: #cccccc;
-            --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            --accent-color: hsl(from var(--accent-color-base) calc(h - 9) s l);
         }
 
         * {
             box-sizing: border-box;
-            transition: var(--transition);
         }
 
         html {
@@ -46,9 +36,11 @@
             background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
             display: flex;
             justify-content: center;
+            align-items: start;
             margin: 0;
             padding: 20px;
             color: var(--text-color);
+            min-height: 100vh;
         }
 
         form {
@@ -89,7 +81,9 @@
         }
 
         h1 {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-size: 2.5rem;
             margin: 1.5rem 0 1rem;
             color: var(--text-color);
@@ -157,6 +151,7 @@
             border-left: 5px solid var(--accent-color);
             background: var(--secondary-bg);
             padding: 0.5rem 1rem;
+            transition: var(--transition);
         }
 
         .changelog-item:hover {
@@ -213,18 +208,18 @@
         }
 
         button:hover {
-            transform: translateY(-2px);
+            transform: scale(1.05);
             box-shadow: 0 6px 12px var(--shadow);
         }
 
         button:active {
-            transform: translateY(0);
+            transform: scale(1);
         }
 
-        .theme-toggle {
+        #theme-toggle {
             padding: 4px 8px;
             margin-left: 1rem;
-            vertical-align: middle;
+            display: none;
         }
 
         .about {
@@ -236,10 +231,8 @@
 </head>
 
 <body>
-
     <form>
-        <h1>Rogue Glitch Save Upgrade<button type="button" class="theme-toggle" id="theme-toggle">🌙</button></h1>
-
+        <h1>Rogue Glitch Save Upgrade<button type="button" id="theme-toggle">🌙</button></h1>
         <div class="formcontainer">
             <hr />
             <div class="container">
@@ -260,7 +253,6 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
             <hr />
             <div class="container">
@@ -308,24 +300,22 @@
             </div>
         </div>
     </form>
-
     <script src="rgt_webui.js"></script>
-
     <script>
+        let isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const toggleButton = document.getElementById('theme-toggle');
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
+        toggleButton.style.display = 'unset';
+        toggleButton.textContent = isDark ? '🌞' : '🌙';
         toggleButton.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            setThemeEmoji();
-        });
-        const setThemeEmoji = () => {
-            if (document.documentElement.classList.contains('dark')) {
+            isDark = !isDark;
+            if (isDark) {
+                document.documentElement.style.setProperty('color-scheme', 'dark');
                 toggleButton.textContent = '🌞';
             } else {
+                document.documentElement.style.setProperty('color-scheme', 'light');
                 toggleButton.textContent = '🌙';
             }
-        };
-        setThemeEmoji();
+        });
         const inputElement = document.getElementById("fileInput");
         inputElement.addEventListener("change", handleFiles, false);
 
@@ -374,7 +364,6 @@
             document.body.removeChild(link);
         }
     </script>
-
 </body>
 
 </html>
