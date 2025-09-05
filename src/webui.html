@@ -16,7 +16,7 @@
             --transition: all 0.2s ease;
             --shadow-color: rgba(0, 0, 0, 0.1);
             --shadow: 0 4px 8px var(--shadow-color);
-            --accent-color-base: #007bff;
+            --accent-color-base: #9400D3;
             --accent-color: var(--accent-color-base);
             --accent-dark: hsl(from var(--accent-color-base) calc(h + 9) s calc(l - 15));
             --focus-shadow-color: rgba(from var(--accent-color-base) r g b 0.25);
@@ -34,24 +34,21 @@
 
         * {
             box-sizing: border-box;
+            transition: var(--transition);
         }
 
         html {
             background-color: var(--primary-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: var(--transition);
         }
 
         body {
             background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
             padding: 20px;
             color: var(--text-color);
-            transition: var(--transition);
         }
 
         form {
@@ -59,10 +56,8 @@
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            max-width: 600px;
+            max-width: 37.5rem;
             width: 100%;
-            overflow: hidden;
-            transition: var(--transition);
         }
 
         @media (max-width: 768px) {
@@ -81,7 +76,6 @@
             color: var(--text-color);
             font-size: 1rem;
             cursor: pointer;
-            transition: var(--transition);
         }
 
         input[type=file]:hover {
@@ -99,18 +93,15 @@
             font-size: 2.5rem;
             margin: 1.5rem 0 1rem;
             color: var(--text-color);
-            font-weight: 300;
-            position: relative;
+            font-weight: 360;
         }
 
         .formcontainer {
-            text-align: left;
             margin: 2rem;
         }
 
         .container {
             padding: 1.5rem 0;
-            text-align: left;
         }
 
         .container label {
@@ -122,31 +113,29 @@
 
         hr {
             border: none;
-            height: 1px;
+            height: 0.1rem;
             background: linear-gradient(to right, transparent, var(--border-color), transparent);
-            margin: 2rem 0;
         }
 
         table {
             width: 100%;
-            border-collapse: separate;
             border-spacing: 0 0.5rem;
         }
 
         td {
             padding: 1rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
         }
 
         table td:first-child label {
             display: inline;
+            cursor: pointer;
         }
 
         input[type=checkbox] {
             margin-right: 0.5rem;
             transform: scale(1.2);
             accent-color: var(--accent-color);
+            cursor: pointer;
         }
 
         .tDescription {
@@ -159,7 +148,6 @@
         }
 
         ul {
-            list-style-type: none;
             padding: 0;
             margin: 0;
         }
@@ -168,9 +156,7 @@
             margin-bottom: 1rem;
             border-left: 5px solid var(--accent-color);
             background: var(--secondary-bg);
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
             padding: 0.5rem 1rem;
-            transition: var(--transition);
         }
 
         .changelog-item:hover {
@@ -199,7 +185,6 @@
 
         .container:has(#changelog) {
             max-height: 400px;
-            overflow-y: auto;
             overflow-x: hidden;
             scroll-behavior: smooth;
             scrollbar-width: thin;
@@ -210,7 +195,6 @@
             border-radius: var(--border-radius);
             box-shadow: 0 2px 4px var(--shadow-color);
             margin-left: 0.5rem;
-            transition: var(--transition);
         }
 
         img:hover {
@@ -222,11 +206,10 @@
             color: white;
             border: none;
             border-radius: var(--border-radius);
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem;
             font-size: 1rem;
             cursor: pointer;
             box-shadow: var(--shadow);
-            transition: var(--transition);
         }
 
         button:hover {
@@ -241,12 +224,13 @@
         .theme-toggle {
             padding: 4px 8px;
             margin-left: 1rem;
+            vertical-align: middle;
         }
 
-        div[style*="flex-end"] {
+        .about {
             display: flex;
             justify-content: flex-end;
-            margin-top: 2rem;
+            margin: 1rem 0rem -1rem;
         }
     </style>
 </head>
@@ -319,7 +303,7 @@
                     </li>
                 </ul>
             </div>
-            <div style="display: flex;justify-content: flex-end">
+            <div class="about">
                 <button type="button" onclick="alert(Module.getAboutString())">About</button>
             </div>
         </div>
