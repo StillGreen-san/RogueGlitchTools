@@ -116,8 +116,13 @@
             border-spacing: 0 0.5rem;
         }
 
-        td {
+        table td {
             padding: 1rem;
+        }
+
+        table td:first-child {
+            width: min-content;
+            white-space: nowrap;
         }
 
         table td:first-child label {
@@ -139,11 +144,13 @@
             color: var(--muted-text);
             font-size: 0.9rem;
             line-height: 1.5;
+            width: 100%;
         }
 
         ul {
             padding: 0;
-            margin: 0;
+            margin: 0 -9% 0 0;
+            list-style: none;
         }
 
         .changelog-item {
@@ -155,7 +162,7 @@
         }
 
         .changelog-item:hover {
-            background: var(--primary-bg);
+            background: color-mix(in srgb, var(--secondary-bg), var(--primary-bg));
             transform: translateX(5px);
         }
 
@@ -178,12 +185,16 @@
             transform: none;
         }
 
-        .container:has(#changelog) {
+        #changelog {
             max-height: 400px;
             overflow-x: hidden;
             scroll-behavior: smooth;
             scrollbar-width: thin;
             scrollbar-color: var(--accent-color) var(--border-color);
+            border: 2px solid var(--border-color);
+            background: var(--primary-bg);
+            border-radius: var(--border-radius);
+            padding: 1rem;
         }
 
         img {
@@ -246,9 +257,9 @@
                                 <label for="oldDefaults">Unlock Old Defaults</label>
                             </td>
                             <td class="tDescription">
-                                Items unlocked by default have changed <br />
-                                in Ultra this option explicitly unlocks <br />
-                                them as they are not part of the save file
+                                Default Items have changed in Ultra,
+                                <br>
+                                this option unlocks them so they dont have to be earned again
                             </td>
                         </tr>
                     </tbody>
@@ -256,44 +267,46 @@
             </div>
             <hr />
             <div class="container">
-                <label for="changelog">
+                <label for="changelog-list">
                     <strong>Changelog</strong>
                     <a href="https://github.com/StillGreen-san/RogueGlitchTools">
                         <img style="vertical-align: middle;"
                             src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&amp;logo=github&amp;logoColor=white">
                     </a>
                 </label>
-                <ul id="changelog">
-                    <li class="changelog-item">v0.5 - Old but Gold
-                        <ul>
-                            <li class="changelog-sub-item">add option to include legacy default items</li>
-                        </ul>
-                    </li>
-                    <li class="changelog-item">v0.4 - Proper Insertion
-                        <ul>
-                            <li class="changelog-sub-item"><span>refactor upgrade logic<br />
-                                    insert relevant data into ultra save<br />
-                                    instead of upgrading in place</span></li>
-                        </ul>
-                    </li>
-                    <li class="changelog-item">v0.3 - Serial Cleaner
-                        <ul>
-                            <li class="changelog-sub-item">remove unused code</li>
-                            <li class="changelog-sub-item">some internal refactoring</li>
-                        </ul>
-                    </li>
-                    <li class="changelog-item">v0.2 - Web Design is my Passion
-                        <ul>
-                            <li class="changelog-sub-item">simple html ui</li>
-                            <li class="changelog-sub-item">some internal refactoring</li>
-                        </ul>
-                    </li>
-                    <li class="changelog-item">v0.1 - Hack Job
-                        <ul>
-                            <li class="changelog-sub-item">raylib prototype</li>
-                        </ul>
-                    </li>
-                </ul>
+                <div id="changelog">
+                    <ul id="changelog-list">
+                        <li class="changelog-item">v0.5 - Old but Gold
+                            <ul>
+                                <li class="changelog-sub-item">add option to include legacy default items</li>
+                            </ul>
+                        </li>
+                        <li class="changelog-item">v0.4 - Proper Insertion
+                            <ul>
+                                <li class="changelog-sub-item"><span>refactor upgrade logic<br />
+                                        insert relevant data into ultra save<br />
+                                        instead of upgrading in place</span></li>
+                            </ul>
+                        </li>
+                        <li class="changelog-item">v0.3 - Serial Cleaner
+                            <ul>
+                                <li class="changelog-sub-item">remove unused code</li>
+                                <li class="changelog-sub-item">some internal refactoring</li>
+                            </ul>
+                        </li>
+                        <li class="changelog-item">v0.2 - Web Design is my Passion
+                            <ul>
+                                <li class="changelog-sub-item">simple html ui</li>
+                                <li class="changelog-sub-item">some internal refactoring</li>
+                            </ul>
+                        </li>
+                        <li class="changelog-item">v0.1 - Hack Job
+                            <ul>
+                                <li class="changelog-sub-item">raylib prototype</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="about">
                 <button type="button" onclick="alert(Module.getAboutString())">About</button>
