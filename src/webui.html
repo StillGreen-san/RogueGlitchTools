@@ -1,9 +1,7 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rogue Glitch Savegame Upgrade</title>
     <style>
         :root {
@@ -13,322 +11,275 @@
             --text-color: light-dark(#333333, #e0e0e0);
             --border-color: light-dark(#cccccc, #404040);
             --muted-text: light-dark(#424242, #cccccc);
-            --border-radius: 8px;
-            --transition: all 0.2s ease;
-            --shadow-color: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
-            --shadow: 0 4px 8px var(--shadow-color);
+            --shadow-color: light-dark(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
             --accent-color-base: #9400D3;
             --accent-color: light-dark(var(--accent-color-base), hsl(from var(--accent-color-base) calc(h - 9) s l));
             --accent-dark: light-dark(hsl(from var(--accent-color-base) calc(h + 9) s calc(l - 15)), hsl(from var(--accent-color-base) calc(h + 9) s calc(l - 15)));
             --focus-shadow-color: rgba(from var(--accent-color-base) r g b 0.25);
+            --gap: 1rem;
+            --border-width: 2px;
+            --border-radius: 8px;
+            --shadow: 0 4px 8px var(--shadow-color);
         }
 
         * {
-            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        .end {
+            justify-content: end;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            gap: var(--gap);
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+        }
+
+        .border,
+        dd {
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: var(--gap);
         }
 
         html {
-            background-color: var(--primary-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
-            display: flex;
             justify-content: center;
             align-items: start;
-            margin: 0;
-            padding: 20px;
-            color: var(--text-color);
+            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
             min-height: 100vh;
-        }
 
-        form {
-            background: linear-gradient(145deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            max-width: 37.5rem;
-            width: 100%;
-            position: relative;
-        }
-
-        @media (max-width: 768px) {
-            form {
-                max-width: min(90vw, 600px);
+            >div {
+                margin: 1rem;
+                max-width: 35rem;
+                background: linear-gradient(225deg, var(--primary-bg), var(--secondary-bg));
             }
         }
 
-        input[type=file] {
-            width: 100%;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius);
-            background: var(--primary-bg);
-            color: var(--text-color);
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        input[type=file]:hover {
-            border-color: var(--accent-color);
-        }
-
-        input[type=file]:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 5px var(--focus-shadow-color);
-        }
-
         h1 {
-            font-size: 2.5rem;
-            margin: 1.5rem 0 1rem;
-            color: var(--text-color);
-            font-weight: 360;
             text-align: center;
+            font-size: 2.5rem;
+            font-weight: 360;
         }
 
-        .formcontainer {
-            margin: 2rem;
-        }
-
-        .container {
-            padding: 1.5rem 0;
-        }
-
-        .container label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: var(--text-color);
+        h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
         }
 
         hr {
-            border: none;
-            height: 0.1rem;
+            height: calc(var(--gap) / 4);
             background: linear-gradient(to right, transparent, var(--border-color), transparent);
         }
 
-        table {
-            width: 100%;
-            border-spacing: 0 0.5rem;
-        }
-
-        table td {
-            padding: 1rem;
-        }
-
-        table td:first-child {
-            width: min-content;
-            white-space: nowrap;
-        }
-
-        table td:first-child label {
-            display: inline;
-            cursor: pointer;
-        }
-
-        input[type=checkbox] {
-            margin-right: 0.5rem;
-            transform: scale(1.2);
-            accent-color: var(--accent-color);
-            cursor: pointer;
-        }
-
-        .tDescription {
-            background: var(--secondary-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            color: var(--muted-text);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            width: 100%;
-        }
-
-        ul {
-            padding: 0;
-            margin: 0 -9% 0 0;
-            list-style: none;
-        }
-
-        .changelog-item {
-            margin-bottom: 1rem;
-            border-left: 5px solid var(--accent-color);
-            background: var(--secondary-bg);
-            padding: 0.5rem 1rem;
-            transition: var(--transition);
-        }
-
-        .changelog-item:hover {
-            background: color-mix(in srgb, var(--secondary-bg), var(--primary-bg));
-            transform: translateX(5px);
-        }
-
-        .changelog-item ul {
-            list-style-type: disc;
-            margin-top: 0.5rem;
-            padding-left: 1rem;
-        }
-
-        .changelog-sub-item {
-            margin-bottom: 0.3rem;
-            border: none;
-            background: none;
-            padding-left: 0;
-            transform: none;
-        }
-
-        .changelog-sub-item:hover {
-            background: none;
-            transform: none;
-        }
-
-        #changelog {
-            max-height: 400px;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent-color) var(--border-color);
-            border: 2px solid var(--border-color);
-            background: var(--primary-bg);
-            border-radius: var(--border-radius);
-            padding: 1rem 1rem 0;
-        }
-
+        button,
         .button {
             background: linear-gradient(90deg, var(--accent-color), var(--accent-dark));
             color: white;
-            border: none;
             border-radius: var(--border-radius);
             padding: 0.5rem 1rem;
             font-size: 1rem;
             cursor: pointer;
             box-shadow: var(--shadow);
-        }
-
-        .button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px var(--shadow);
-        }
-
-        .button:active {
-            transform: scale(1);
-        }
-
-        #theme-toggle {
-            padding: 4px 8px;
-            display: none;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem
-        }
-
-        .github-button {
             display: inline-flex;
             align-items: center;
             text-decoration: none;
+
+            >svg {
+                width: 1rem;
+                margin-right: 0.3rem;
+                fill: white;
+            }
+
+            &:hover {
+                transform: scale(1.05);
+            }
+
+            &:active {
+                transform: scale(1);
+            }
         }
 
-        .github-logo {
-            width: 1rem;
-            height: 1rem;
-            margin-right: 0.3rem;
-            fill: white;
+
+        input {
+            background: var(--primary-bg);
+            cursor: pointer;
+            accent-color: var(--accent-color);
+
+            &:hover {
+                border-color: var(--accent-color);
+            }
+
+            &[type=checkbox] {
+                transform: scale(1.2);
+                margin-right: 0.2rem;
+            }
+        }
+
+        dl {
+            display: grid;
+            gap: var(--gap);
+        }
+
+        dt {
+            grid-column: 1;
+            align-self: center;
+
+            >label {
+                font-weight: bold;
+            }
+        }
+
+        dd {
+            grid-column: 2;
+            background: var(--secondary-bg);
+            color: var(--muted-text);
+            font-size: 0.9rem;
+        }
+
+        .changelog {
+            background: var(--primary-bg);
+            list-style: none;
+            max-height: 24rem;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) var(--border-color);
+            padding-right: 0;
+
+            >li {
+                padding: 0.5rem 1rem;
+                border-left: 0.4rem solid var(--accent-color);
+                background: var(--secondary-bg);
+                transition: transform 0.1s ease;
+
+                >ul {
+                    list-style-type: disc;
+                    margin-left: 1.5rem;
+                    margin-top: 0.5rem;
+
+                    >li {
+                        border: none;
+                    }
+                }
+
+                &:hover {
+                    background: color-mix(in srgb, var(--secondary-bg), var(--primary-bg));
+                    transform: translateX(0.4rem);
+                }
+            }
+        }
+
+        #themeToggle {
+            --width: calc(var(--border-width) * 4);
+            position: absolute;
+            top: var(--width);
+            right: var(--width);
+            padding: calc(var(--width) / 2) var(--width);
+        }
+
+        :has(#themeToggle) {
+            position: relative;
         }
     </style>
 </head>
 
-<body>
-    <form>
-        <button type="button" class="button" id="theme-toggle">🌙</button>
-        <h1>Rogue Glitch Save Upgrade</h1>
-        <div class="formcontainer">
+<body class="row">
+    <div class="row border">
+        <div class="col">
+            <h1>Rogue Glitch Save Upgrade</h1>
             <hr />
-            <div class="container">
-                <label for="fileInput"><strong>Drop Savegame Here</strong></label>
-                <input type="file" id="fileInput" />
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <input type="checkbox" id="oldDefaults" />
-                                <label for="oldDefaults">Unlock Old Defaults</label>
-                            </td>
-                            <td class="tDescription">
-                                Default Items have changed in Ultra,
-                                <br>
-                                this option unlocks them so they dont have to be earned again
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col">
+                <h2>Drop Savegame Here</h2>
+                <input type="file" id="fileInput" class="border">
+                <dl>
+                    <dt>
+                        <input type="checkbox" id="oldDefaults">
+                        <label for="oldDefaults">Unlock Old Defaults</label>
+                    </dt>
+                    <dd>
+                        Default Items have changed in Ultra,
+                        <br>
+                        this option unlocks them so they don't have to be earned again.
+                    </dd>
+                </dl>
             </div>
             <hr />
-            <div class="container">
-                <label for="changelog-list">
-                    <strong>Changelog</strong>
-                </label>
-                <div id="changelog">
-                    <ul id="changelog-list">
-                        <li class="changelog-item">v0.5 - Old but Gold
-                            <ul>
-                                <li class="changelog-sub-item">add option to include legacy default items</li>
-                            </ul>
-                        </li>
-                        <li class="changelog-item">v0.4 - Proper Insertion
-                            <ul>
-                                <li class="changelog-sub-item"><span>refactor upgrade logic<br />
-                                        insert relevant data into ultra save<br />
-                                        instead of upgrading in place</span></li>
-                            </ul>
-                        </li>
-                        <li class="changelog-item">v0.3 - Serial Cleaner
-                            <ul>
-                                <li class="changelog-sub-item">remove unused code</li>
-                                <li class="changelog-sub-item">some internal refactoring</li>
-                            </ul>
-                        </li>
-                        <li class="changelog-item">v0.2 - Web Design is my Passion
-                            <ul>
-                                <li class="changelog-sub-item">simple html ui</li>
-                                <li class="changelog-sub-item">some internal refactoring</li>
-                            </ul>
-                        </li>
-                        <li class="changelog-item">v0.1 - Hack Job
-                            <ul>
-                                <li class="changelog-sub-item">raylib prototype</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+            <div class="col">
+                <h2>Changelog</h2>
+                <ol reversed class="changelog col border">
+                    <li>v0.WIP
+                        <ul>
+                            <li>WIP</li>
+                        </ul>
+                    </li>
+                    <li>v0.5 - Old but Gold
+                        <ul>
+                            <li>add option to include legacy default items</li>
+                        </ul>
+                    </li>
+                    <li>v0.4 - Proper Insertion
+                        <ul>
+                            <li>refactor upgrade logic</li>
+                            <li>insert relevant data into ultra save</li>
+                            <li>instead of upgrading in place</li>
+                        </ul>
+                    </li>
+                    <li>v0.3 - Serial Cleaner
+                        <ul>
+                            <li>remove unused code</li>
+                            <li>some internal refactoring</li>
+                        </ul>
+                    </li>
+                    <li>v0.2 - Web Design is my Passion
+                        <ul>
+                            <li>simple html ui</li>
+                            <li>some internal refactoring</li>
+                        </ul>
+                    </li>
+                    <li>v0.1 - Hack Job
+                        <ul>
+                            <li>raylib prototype</li>
+                        </ul>
+                    </li>
+                </ol>
             </div>
-            <div class="buttons">
-                <a href="https://github.com/StillGreen-san/RogueGlitchTools" target="_blank" class="button github-button">
-                    <svg viewBox="0 0 24 24" version="1.1" class="github-logo">
+            <hr />
+            <div class="row end">
+                <a class="button" href="https://github.com/StillGreen-san/RogueGlitchTools" target="_blank">
+                    <svg viewBox="0 0 24 24">
                         <path
                             d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z">
                         </path>
                     </svg>
                     GitHub
                 </a>
-                <button type="button" class="button" onclick="alert(Module.getAboutString())">About</button>
+                <button type="button">About</button>
             </div>
         </div>
-    </form>
+        <button type="button" id="themeToggle">◐</button>
+    </div>
     <script src="rgt_webui.js"></script>
     <script>
         let isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const toggleButton = document.getElementById('theme-toggle');
-        toggleButton.style.display = 'unset';
+        const toggleButton = document.getElementById('themeToggle');
         toggleButton.textContent = isDark ? '🌞' : '🌙';
-        toggleButton.addEventListener('click', () => {
+        toggleButton.addEventListener('click', toggleTheme);
+        const inputElement = document.getElementById("fileInput");
+        inputElement.addEventListener("change", handleFiles, false);
+
+        function toggleTheme() {
             isDark = !isDark;
             if (isDark) {
                 document.documentElement.style.setProperty('color-scheme', 'dark');
@@ -337,9 +288,7 @@
                 document.documentElement.style.setProperty('color-scheme', 'light');
                 toggleButton.textContent = '🌙';
             }
-        });
-        const inputElement = document.getElementById("fileInput");
-        inputElement.addEventListener("change", handleFiles, false);
+        }
 
         async function handleFiles() {
             if (this.files.length >= 1) {
