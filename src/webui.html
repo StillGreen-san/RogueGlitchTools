@@ -110,8 +110,14 @@
             &:active {
                 transform: scale(1);
             }
-        }
 
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                background: var(--secondary-bg);
+                transform: none;
+            }
+        }
 
         input {
             background: var(--primary-bg);
@@ -125,6 +131,12 @@
             &[type=checkbox] {
                 transform: scale(1.2);
                 margin-right: 0.2rem;
+            }
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                background: var(--secondary-bg);
             }
         }
 
@@ -201,8 +213,8 @@
             <h1>Rogue Glitch Save Upgrade</h1>
             <hr />
             <div class="col">
-                <h2>Drop Savegame Here</h2>
-                <input type="file" id="fileInput" class="border">
+                <h2 id="fileLabel" text="Drop Savegame Here">JavaScript Required</h2>
+                <input disabled type="file" id="fileInput" class="border" title="JavaScript Required">
                 <dl>
                     <dt>
                         <input type="checkbox" id="oldDefaults">
@@ -265,28 +277,51 @@
                     </svg>
                     GitHub
                 </a>
-                <button type="button">About</button>
+                <button disabled type="button" id="aboutButton" title="JavaScript Required">About</button>
             </div>
         </div>
-        <button type="button" id="themeToggle">◐</button>
+        <button disabled type="button" id="themeToggle" title="JavaScript Required">◐</button>
     </div>
     <script src="rgt_webui.js"></script>
     <script>
-        let isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const toggleButton = document.getElementById('themeToggle');
-        toggleButton.textContent = isDark ? '🌞' : '🌙';
-        toggleButton.addEventListener('click', toggleTheme);
-        const inputElement = document.getElementById("fileInput");
-        inputElement.addEventListener("change", handleFiles, false);
+        let isDark;
+        let themeToggle;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('fileInput');
+            const aboutButton = document.getElementById('aboutButton');
+            const fileLabel = document.getElementById('fileLabel');
+            themeToggle = document.getElementById('themeToggle');
+            isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            fileInput.addEventListener("change", handleFiles, false);
+            if (fileInput) {
+                fileInput.removeAttribute('title');
+                fileInput.disabled = false;
+            }
+            if (themeToggle) {
+                themeToggle.textContent = isDark ? '🌞' : '🌙';
+                themeToggle.addEventListener('click', toggleTheme);
+                themeToggle.removeAttribute('title');
+                themeToggle.disabled = false;
+            }
+            if (aboutButton) {
+                aboutButton.removeAttribute('title');
+                aboutButton.disabled = false;
+            }
+            if (fileLabel) {
+                fileLabel.textContent = fileLabel.getAttribute('text');
+            }
+        });
 
         function toggleTheme() {
             isDark = !isDark;
             if (isDark) {
                 document.documentElement.style.setProperty('color-scheme', 'dark');
-                toggleButton.textContent = '🌞';
+                themeToggle.textContent = '🌞';
             } else {
                 document.documentElement.style.setProperty('color-scheme', 'light');
-                toggleButton.textContent = '🌙';
+                themeToggle.textContent = '🌙';
             }
         }
 
