@@ -373,22 +373,30 @@
         }
 
         async function handleFiles() {
-            if (this.files.length >= 1) {
-                const fileContent = await this.files[0].arrayBuffer();
-                const options = gatherUpgradeOptions();
-                const upgraded = Module.tryUpgrade(fileContent, options);
-                const data = new Uint8Array({
-                    [Symbol.iterator]: function* () {
-                        for (let i = 0; i < upgraded.size(); i++) {
-                            yield upgraded.get(i);
-                        }
-                    }
-                });
-                const out = new Blob([data], { type: 'application/octet-stream' });
-                downloadBlob(out, 'SaveData__Deluxe.glitch');
-                upgraded.delete();
-                this.value = null;
+            try {
+                await handleFilesImpl(this);
+            } catch (error) {
+                alert('upgrade failed: ' + (error.message || 'could not be upgraded'))
             }
+        }
+        async function handleFilesImpl(self) {
+            if (self.files.length > 1) throw new Error("more than 1 file supplied");
+            if (self.files.length < 1) return;
+            const fileContent = await self.files[0].arrayBuffer();
+            const options = gatherUpgradeOptions();
+            const upgraded = Module.tryUpgrade(fileContent, options);
+            if (upgraded.size() == 0) throw new Error("could not be upgraded");
+            const data = new Uint8Array({
+                [Symbol.iterator]: function* () {
+                    for (let i = 0; i < upgraded.size(); i++) {
+                        yield upgraded.get(i);
+                    }
+                }
+            });
+            const out = new Blob([data], { type: 'application/octet-stream' });
+            downloadBlob(out, 'SaveData__Deluxe.glitch');
+            upgraded.delete();
+            self.value = null;
         }
 
         function gatherUpgradeOptions() {
