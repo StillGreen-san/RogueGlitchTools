@@ -207,6 +207,28 @@
         :has(#themeToggle) {
             position: relative;
         }
+
+        #aboutDialog {
+            margin: auto;
+            background: var(--secondary-bg);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            width: 1.5rem;
+            height: 1.35rem;
+            font-family: unset;
+            font-size: 2rem;
+            justify-content: center;
+            background: none;
+            box-shadow: none;
+        }
+
+        ::backdrop {
+            backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 
@@ -283,6 +305,15 @@
                     GitHub
                 </a>
                 <button disabled type="button" id="aboutButton" title="JavaScript Required">About</button>
+                <dialog id="aboutDialog" closedby="any" class="border">
+                    <form method="dialog">
+                        <button class="close-button">&times</button>
+                    </form>
+                    <div class="col">
+                        <h2>About</h2>
+                        <pre id="aboutContent"></pre>
+                    </div>
+                </dialog>
             </div>
         </div>
         <button disabled type="button" id="themeToggle" title="JavaScript Required">◐</button>
@@ -295,6 +326,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const fileInput = document.getElementById('fileInput');
             const aboutButton = document.getElementById('aboutButton');
+            const aboutDialog = document.getElementById('aboutDialog');
             const fileLabel = document.getElementById('fileLabel');
             themeToggle = document.getElementById('themeToggle');
             isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -311,6 +343,7 @@
                 themeToggle.disabled = false;
             }
             if (aboutButton) {
+                aboutButton.addEventListener('click', showAbout);
                 aboutButton.removeAttribute('title');
                 aboutButton.disabled = false;
             }
@@ -329,6 +362,13 @@
                 document.documentElement.style.setProperty('color-scheme', 'light');
                 themeToggle.textContent = '🌛';
                 themeToggle.title = 'toggle dark mode';
+            }
+        }
+
+        function showAbout() {
+            if (aboutDialog) {
+                document.getElementById('aboutContent').innerHTML = Module.getAboutString();
+                aboutDialog.showModal();
             }
         }
 
