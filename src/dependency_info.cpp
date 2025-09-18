@@ -19,7 +19,7 @@ constexpr std::array<LibraryInfo, 4> DEPENDENCY_INFOS{{
     {"https://github.com/weidai11/cryptopp", "BSL"},
     {"https://github.com/nlohmann/json", "MIT"},
     {"https://github.com/catchorg/Catch2", "BSL"},
-    {"https://emscripten.org/index.html", {}},
+    {"https://emscripten.org", "MIT/NCSA"},
 }};
 constexpr ptrdiff_t DEPENDENCY_INFOS_MAX_URL_LEN = std::max_element(DEPENDENCY_INFOS.begin(), DEPENDENCY_INFOS.end(),
     [](const auto& lhs, const auto& rhs)

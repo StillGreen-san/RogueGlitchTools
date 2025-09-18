@@ -18,6 +18,7 @@ int main(int argc, char** argv)
 	{
 		std::cout << "Incorrect Number of arguments!\n";
 		std::cout << "Specify a path to 1 encrypted '.glitch' or decrypted '.json' file.\n";
+		std::cout << "Or '--about' to show about information\n";
 		return -1;
 	}
 
